@@ -1,18 +1,13 @@
 <template>
-  <Layout>
-    <router-view />
-  </Layout>
+  <main>
+    <slot />
+  </main>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import Layout from '@/components/Layout/index.vue'
-
 export default defineComponent({
-  name: 'App',
-  components: {
-    Layout
-  },
+  name: 'MainContainer',
   setup () {
     return {}
   }
@@ -20,4 +15,5 @@ export default defineComponent({
 </script>
 
 <style lang="less" scoped>
+
 </style>

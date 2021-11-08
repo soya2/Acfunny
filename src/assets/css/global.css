@@ -1,0 +1,27 @@
+body {
+  margin: 0;
+  background-color: rgb(247, 247, 247);
+}
+
+button {
+  border: none;
+  cursor: pointer;
+  background-color: transparent;
+}
+
+.basic-block {
+  border: 2px solid transparent;
+  border-radius: 4px;
+  transition: .2s;
+  box-sizing: border-box;
+}
+
+.basic-block:hover {
+  background-color: rgba(245, 245, 245, 0.8);
+  cursor: pointer;
+}
+
+.basic-block:active {
+  background-color: rgba(230, 230, 230, 0.8);
+  border: 2px solid rgb(223, 223, 223);
+}

@@ -1,18 +1,13 @@
 <template>
-  <Layout>
-    <router-view />
-  </Layout>
+  <footer>
+    111
+  </footer>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import Layout from '@/components/Layout/index.vue'
-
 export default defineComponent({
-  name: 'App',
-  components: {
-    Layout
-  },
+  name: 'FooterBar',
   setup () {
     return {}
   }
@@ -20,4 +15,9 @@ export default defineComponent({
 </script>
 
 <style lang="less" scoped>
+footer {
+  margin-top: auto;
+  padding: 12px;
+  background-color: rgb(236, 236, 236);
+}
 </style>
