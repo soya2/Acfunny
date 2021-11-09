@@ -5,7 +5,7 @@
   >{{ bubble }}</div>
   <div
     ref="icon"
-    class="icon-container"
+    class="icon-container slide-border"
   >
     <font-awesome-icon :icon="icon" />
   </div>
@@ -52,25 +52,13 @@ export default defineComponent({
 .icon-container {
   height: @IconHeight;
   width: @IconHeight;
-  transition: background-color .2s, border-color .8s;
-  border: 1px solid transparent;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  &:hover {
-    // border-color: rgb(202, 202, 202);
-    // color: @highLightColor;
-    & +.tip {
-      opacity: 1;
-    }
-  }
-  &:active {
-    background-color: rgb(232, 232, 232);
-    border-color: rgb(232, 232, 232);
-    color: @highLightColor;
-  }
+  &:hover +.tip { opacity: 1; }
+  &:active { color: @highLightColor; }
 }
 
 .tip {

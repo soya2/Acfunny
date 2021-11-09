@@ -61,13 +61,11 @@ nav {
   padding: 12px;
   background-color: #fff;
   backdrop-filter: blur(8px);
-  box-shadow: 4px 12px rgb(240, 240, 240);
+  border-bottom: 2px solid rgb(240, 240, 240);
   display: flex;
   justify-content: space-between;
   align-content: center;
-  .logo-bar {
-    width: 33%;
-  }
+  .logo-bar { width: 33%; }
   .button-bar {
     display: flex;
     justify-content: flex-end;

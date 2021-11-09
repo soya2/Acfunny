@@ -1,11 +1,12 @@
 <template>
   <div
-    class="card-container"
+    class="card-container slide-border"
     @click="handleClick(videoData.id)"
   >
-    <img :src="videoData.url" />
-    <h5>{{ videoData.title }}</h5>
-    <p>{{ videoData.poster }}</p>
+    <img :src="videoData.url"  alt="no-image"/><br />
+    <div v-if="videoData.isLive" class="is-live">Live</div>
+    <span class="vc-title">{{ videoData.title }}</span>
+    <span class="vc-poster">{{ videoData.poster }}</span>
   </div>
 </template>
 
@@ -20,6 +21,7 @@ export interface VideoData {
   title: string;
   poster: string;
   url: string;
+  isLive?: boolean;
 }
 
 export default defineComponent({
@@ -30,9 +32,9 @@ export default defineComponent({
       required: true
     }
   },
-  setup (props, context) {
-    const handleClick = (id: number): void => {
-      context.emit('handleClick', id)
+  setup () {
+    const handleClick = (id: number) => {
+      return id
     }
     return {
       handleClick
@@ -41,22 +43,41 @@ export default defineComponent({
 })
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .card-container {
-  width: 20%;
-  padding: 4px;
+  padding: 4px 8px 10px 8px;
   margin: 8px;
+  border-radius: 4px;
+  position: relative;
+  & > * { cursor: pointer; }
+  &:not(:first-child) { padding-left: 8px; }
+  &:hover img { box-shadow: 0 4px 12px #d7d7d7; }
   img {
-    border-radius: 2px;
+    border-radius: 4px;
     width: 100%;
+    transition: .4s;
   }
-  h5, p {
-    margin: 4px 0;
+  .is-live {
+    padding: 4px 8px;
+    background-color: #ff2337;
+    color: white;
+    font-size: 0.8rem;
+    border-radius: 4px;
+    position: absolute;
+    top: 12px;
+    left: 16px;
   }
-  p {
+  .vc-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+  .vc-poster {
     text-align: justify;
-    text-justify: inter-ideograph;
-    padding-left: 10px;
     color: rgb(150, 150, 150);
   }
 }

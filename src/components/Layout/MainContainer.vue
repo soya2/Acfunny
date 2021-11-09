@@ -15,5 +15,7 @@ export default defineComponent({
 </script>
 
 <style lang="less" scoped>
-
+main {
+  padding: 8px;
+}
 </style>

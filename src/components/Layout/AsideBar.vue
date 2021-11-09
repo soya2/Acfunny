@@ -13,7 +13,7 @@ export default defineComponent({
       isFold: false,
       unfoldWidth: 200,
       foldWidth: 60,
-      siderBarWidth: 200
+      siderBarWidth: 0
     })
     const clickFoldButton = () => {
       data.isFold = !data.isFold

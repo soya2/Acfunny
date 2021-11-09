@@ -1,8 +1,9 @@
-import { Request } from '../utils/request'
+import { Request } from '@/utils/request'
 
 export function getTestData (params?: any): Promise<any> {
   return Request.axiosInstance({
     url: '/test',
-    method: 'get'
+    method: 'get',
+    params: params || {}
   })
 }
