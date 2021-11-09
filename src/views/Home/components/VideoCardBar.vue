@@ -19,7 +19,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
-import VideoCard, { VideoData } from '@/components/VideoCard'
+import VideoCard, { VideoData } from '@/components/VideoCard.vue'
 
 export default defineComponent({
   name: 'VideoCardBar',
@@ -47,6 +47,7 @@ export default defineComponent({
     padding-left: 16px;
     font-size: 1.6rem;
     font-weight: bold;
+    color: #ffd116;
   }
   .vc-list {
     display: flex;

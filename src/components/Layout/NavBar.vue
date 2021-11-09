@@ -1,19 +1,23 @@
 <template>
   <nav>
-    <div class="logo-bar">Logo</div>
+    <div
+      style="width: 33%"
+      @click="router.push({ name: 'Home' })"
+    >
+      <div class="logo">Logo</div>
+    </div>
     <div class="search-bar">
       <search-bar />
     </div>
     <div class="button-bar">
       <div
         v-for="item in navItemList"
-        :key="item.tip"
+        :key="item.id"
         class="nav-item"
       >
         <icon-button
-          :icon="item.icon"
-          :tip="item.tip"
-          :bubble="item.count || 0"
+          :button-object="item"
+          @handleClickIcon="clickIcon"
         />
       </div>
       <div class="nav-item">
@@ -25,14 +29,9 @@
 
 <script lang="ts">
 import { defineComponent, reactive, toRefs } from 'vue'
-import IconButton from '@/components/IconButton.vue'
+import { useRouter } from 'vue-router'
+import IconButton, { IconButtonType } from '@/components/IconButton/IconButton.vue'
 import SearchBar from '@/components/SearchBar.vue'
-
-type navItem = {
-  icon: string;
-  tip?: string | undefined;
-  count?: number | undefined
-}
 
 export default defineComponent({
   name: 'NavBar',
@@ -43,20 +42,31 @@ export default defineComponent({
   setup () {
     const data = reactive({
       navItemList: [
-        { icon: 'history', tip: '观看历史' },
-        { icon: 'comment', tip: '通知', count: 0 },
-        { icon: 'paint-brush', tip: '创作' }
-      ] as Array<navItem>
+        { id: 1, icon: 'history', tip: '观看历史' },
+        { id: 2, icon: 'comment', tip: '通知', count: 20 },
+        { id: 3, icon: 'paint-brush', tip: '创作' }
+      ] as Array<IconButtonType>
     })
+
+    const router = useRouter()
+
+    const clickIcon = (id: number): void => {
+      switch (id) {
+        case 3: router.push({ path: 'test' })
+      }
+    }
+
     return {
-      ...toRefs(data)
+      ...toRefs(data),
+      clickIcon,
+      router
     }
   }
 })
 </script>
 
-<style lang="less" scoped>
-@navItemHeight: 32px;
+<style lang="scss" scoped>
+$navItemHeight: 32px;
 nav {
   padding: 12px;
   background-color: #fff;
@@ -65,7 +75,14 @@ nav {
   display: flex;
   justify-content: space-between;
   align-content: center;
-  .logo-bar { width: 33%; }
+  .logo {
+    width: fit-content;
+    height: 100%;
+    margin-left: 16px;
+    font-size: 1.4rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
   .button-bar {
     display: flex;
     justify-content: flex-end;
@@ -74,13 +91,13 @@ nav {
     .nav-item {
       padding: 0 4px;
       margin: 0 4px;
-      height: @navItemHeight;
-      width: @navItemHeight;
-      line-height: @navItemHeight;
+      height: $navItemHeight;
+      width: $navItemHeight;
+      line-height: $navItemHeight;
     }
     .avatar-container {
-      width: @navItemHeight;
-      height: @navItemHeight;
+      width: $navItemHeight;
+      height: $navItemHeight;
       border-radius: 50%;
       background-color: gray;
     }

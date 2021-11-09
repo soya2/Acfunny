@@ -1,38 +1,40 @@
 <template>
   <div
-    v-if="bubble !== 0"
+    v-if="buttonObject.count > 0"
     class="bubble"
-  >{{ bubble }}</div>
+  />
   <div
     ref="icon"
     class="icon-container slide-border"
+    @click="$emit('handleClickIcon', buttonObject.id)"
   >
-    <font-awesome-icon :icon="icon" />
+    <font-awesome-icon :icon="buttonObject.icon" />
   </div>
   <div
-    v-if="tip !== ''"
+    v-if="buttonObject.tip && buttonObject.tip !== ''"
     class="tip"
-  >{{ tip }}</div>
+  >{{ buttonObject.tip }}</div>
 </template>
 
 <script lang="ts">
-import { defineComponent, toRefs, reactive } from 'vue'
+import { defineComponent, toRefs, reactive, PropType } from 'vue'
+
+export type IconButtonType = {
+  id: number;
+  icon: string;
+  tip?: string | undefined;
+  count?: number | undefined
+}
+
 export default defineComponent({
   name: 'IconButton',
   props: {
-    icon: {
-      type: String,
-      default: ''
-    },
-    tip: {
-      type: String,
-      default: ''
-    },
-    bubble: {
-      type: Number,
-      default: 0
+    buttonObject: {
+      type: Object as PropType<IconButtonType>,
+      required: true
     }
   },
+  emits: ['handleClickIcon'],
   setup () {
     const data = reactive({
     })
@@ -77,13 +79,9 @@ export default defineComponent({
 
 .bubble {
   position: absolute;
-  transform: translate(20px, -2px);
-  width: @bubbleSize;
-  height: @bubbleSize;
-  font-size: @bubbleSize * 0.6;
-  line-height: @bubbleSize;
-  text-align: center;
-  color: white;
+  transform: translate(28px, 4px);
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background-color: @highLightColor;
   pointer-events: none;

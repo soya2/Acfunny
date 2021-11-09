@@ -45,8 +45,8 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .card-container {
-  padding: 4px 8px 10px 8px;
-  margin: 8px;
+  padding: 4px;
+  margin: 4px 8px;
   border-radius: 4px;
   position: relative;
   & > * { cursor: pointer; }
@@ -58,10 +58,12 @@ export default defineComponent({
     transition: .4s;
   }
   .is-live {
-    padding: 4px 8px;
+    width: 10%;
+    height: 6%;
+    padding: 0 8px 4px 8px;
     background-color: #ff2337;
     color: white;
-    font-size: 0.8rem;
+    font-size: 50%;
     border-radius: 4px;
     position: absolute;
     top: 12px;
