@@ -1,0 +1,23 @@
+@import './variable.scss';
+
+.slide-border {
+  border: 2px solid transparent;
+  transition: background-color .2s, border-color 1s;
+  &:active {
+    background-color: $shadowColor;
+    border-color: $shadowColor;
+  }
+}
+
+.rounded-container {
+  position: absolute;
+  top: 64px;
+  right: 0;
+  // transform: translate(-50% , 10px);
+  width: fit-content;
+  height: 400px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 8px 24px $shadowColor;
+}

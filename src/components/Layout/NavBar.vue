@@ -10,13 +10,23 @@
       <search-bar />
     </div>
     <div class="button-bar">
-      <div
-        v-for="item in navItemList"
-        :key="item.id"
-        class="nav-item"
-      >
+      <div class="nav-item">
         <icon-button
-          :button-object="item"
+          :button-object="navItemList[0]"
+          @handleClickIcon="clickIcon"
+        />
+        <history ref="historyRef" />
+      </div>
+      <div class="nav-item">
+        <icon-button
+          :button-object="navItemList[1]"
+          @handleClickIcon="clickIcon"
+        />
+        <notice ref="noticeRef" />
+      </div>
+      <div class="nav-item">
+        <icon-button
+          :button-object="navItemList[2]"
           @handleClickIcon="clickIcon"
         />
       </div>
@@ -28,36 +38,44 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from 'vue'
+import { defineComponent, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import IconButton, { IconButtonType } from '@/components/IconButton/IconButton.vue'
 import SearchBar from '@/components/SearchBar.vue'
+import History from './components/History.vue'
+import Notice from './components/Notice.vue'
 
 export default defineComponent({
   name: 'NavBar',
   components: {
     IconButton,
-    SearchBar
+    SearchBar,
+    History,
+    Notice
   },
   setup () {
-    const data = reactive({
-      navItemList: [
-        { id: 1, icon: 'history', tip: '观看历史' },
-        { id: 2, icon: 'comment', tip: '通知', count: 20 },
-        { id: 3, icon: 'paint-brush', tip: '创作' }
-      ] as Array<IconButtonType>
-    })
+    const historyRef = ref()
+    const noticeRef = ref()
+    const navItemList = ref([
+      { id: 1, icon: 'history', tip: '观看历史' },
+      { id: 2, icon: 'comment', tip: '通知', count: 20 },
+      { id: 3, icon: 'paint-brush', tip: '创作' }
+    ] as Array<IconButtonType>)
 
     const router = useRouter()
 
-    const clickIcon = (id: number): void => {
+    const clickIcon = (id: number) => {
       switch (id) {
+        case 1: historyRef.value.clickIcon(true); break
+        case 2: noticeRef.value.clickIcon(true); break
         case 3: router.push({ path: 'test' })
       }
     }
 
     return {
-      ...toRefs(data),
+      historyRef,
+      noticeRef,
+      navItemList,
       clickIcon,
       router
     }
@@ -89,6 +107,7 @@ nav {
     align-content: center;
     width: 33%;
     .nav-item {
+      position: relative;
       padding: 0 4px;
       margin: 0 4px;
       height: $navItemHeight;

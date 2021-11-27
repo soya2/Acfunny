@@ -6,7 +6,7 @@ import store from './store'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fas } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import './assets/css/global.scss'
+import '@/style/index.scss'
 
 import { Request } from './utils/request'
 import VueAxios from 'vue-axios'

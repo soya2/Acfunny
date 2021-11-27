@@ -65,6 +65,7 @@ export default defineComponent({
 
 .tip {
   position: absolute;
+  width: fit-content;
   transform: translate(calc(-50% + (@IconHeight / 2)), 10px);
   display: inline-flex;
   opacity: 0;
