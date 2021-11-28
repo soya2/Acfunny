@@ -31,19 +31,21 @@
         />
       </div>
       <div class="nav-item">
-        <div class="avatar-container"></div>
+        <img class="avatar-container" :src="userAvatar" >
       </div>
     </div>
   </nav>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import IconButton, { IconButtonType } from '@/components/IconButton/IconButton.vue'
 import SearchBar from '@/components/SearchBar.vue'
 import History from './components/History.vue'
 import Notice from './components/Notice.vue'
+
+import { getUserById } from '@/api/users'
 
 export default defineComponent({
   name: 'NavBar',
@@ -58,7 +60,7 @@ export default defineComponent({
     const noticeRef = ref()
     const navItemList = ref([
       { id: 1, icon: 'history', tip: '观看历史' },
-      { id: 2, icon: 'comment', tip: '通知', count: 20 },
+      { id: 2, icon: 'comment', tip: '通知', count: 0 },
       { id: 3, icon: 'paint-brush', tip: '创作' }
     ] as Array<IconButtonType>)
 
@@ -72,12 +74,20 @@ export default defineComponent({
       }
     }
 
+    const userAvatar = ref()
+    onMounted(async () => {
+      const { data } = await getUserById(1)
+      userAvatar.value = data.avatar
+      navItemList.value[1].count = data.notice
+    })
+
     return {
       historyRef,
       noticeRef,
       navItemList,
       clickIcon,
-      router
+      router,
+      userAvatar
     }
   }
 })

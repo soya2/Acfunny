@@ -31,7 +31,7 @@ export class Request {
     this.axiosInstance.interceptors.response.use(
       (response: AxiosResponse) => {
         if (response.status === 200) {
-          return response
+          return response.data
         } else {
           Request.errorHandle(response)
           return response
@@ -49,7 +49,7 @@ export class Request {
     )
   }
 
-  private static errorHandle (res: any) {
+  private static errorHandle (res: AxiosResponse) {
     switch (res.status) {
       case 401: break
       case 403: break

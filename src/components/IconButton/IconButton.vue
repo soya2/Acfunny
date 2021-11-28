@@ -76,6 +76,7 @@ export default defineComponent({
   font-size: @tipFontSize;
   line-height: @tipFontSize;
   color: white;
+  z-index: 9;
 }
 
 .bubble {
