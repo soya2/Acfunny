@@ -15,14 +15,18 @@
           :button-object="navItemList[0]"
           @handleClickIcon="clickIcon"
         />
-        <history ref="historyRef" />
+        <transition name="vertical">
+          <history ref="historyRef" />
+        </transition>
       </div>
       <div class="nav-item">
         <icon-button
           :button-object="navItemList[1]"
           @handleClickIcon="clickIcon"
         />
-        <notice ref="noticeRef" />
+        <transition name="vertical">
+          <notice ref="noticeRef" />
+        </transition>
       </div>
       <div class="nav-item">
         <icon-button

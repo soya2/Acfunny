@@ -1,4 +1,5 @@
 @import './variable.scss';
+@import './animation.scss';
 
 .slide-border {
   border: 2px solid transparent;
@@ -21,3 +22,6 @@
   background-color: #fff;
   box-shadow: 0 8px 24px $shadowColor;
 }
+
+.vertical-enter-active { animation: slide-vertical .2s; }
+.vertical-leave-active { animation: slide-vertical .2s reverse; }
