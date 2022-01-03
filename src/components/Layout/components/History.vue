@@ -64,7 +64,8 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .rounded-container {
-  width: 300px;
+  width: 18vw;
+  overflow: hidden;
 }
 .title {
   margin-left: 8px;

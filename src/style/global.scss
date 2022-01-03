@@ -1,3 +1,5 @@
+@import './variable.scss';
+
 body {
   margin: 0;
   background-color: rgb(247, 247, 247);
@@ -7,4 +9,23 @@ button {
   border: none;
   cursor: pointer;
   background-color: transparent;
+}
+
+input {
+  width: 100%;
+  height: 24px;
+  border: 2px solid rgb(230, 230, 230);
+  border-radius: 6px;
+  padding-left: 8px;
+  transition: .2s;
+  outline: none;
+  background-color: rgb(251, 251, 251);
+  caret-color: $mainColor;
+  &:focus-visible {
+    background-color: #fff;
+    border-color: $mainColor;
+    & +button {
+      color: $mainColor;
+    }
+  }
 }

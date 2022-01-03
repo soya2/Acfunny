@@ -25,3 +25,25 @@
 
 .vertical-enter-active { animation: slide-vertical .2s; }
 .vertical-leave-active { animation: slide-vertical .2s reverse; }
+
+.btn-base {
+  padding: 4px 16px;
+  border-radius: 4px;
+  transition: .3s;
+  outline: solid 3px transparent;
+  &:focus {
+    outline: solid 3px $shadowColor;
+  }
+}
+.btn-primary {
+  @extend .btn-base;
+  background-color: $mainColor;
+  color: white;
+  &:focus { outline-color: rgba($mainColor, 0.32); }
+}
+.btn-primary-plain {
+  @extend .btn-primary;
+  background-color: transparent;
+  border: solid 1px $mainColor;
+  color: $mainColor;
+}

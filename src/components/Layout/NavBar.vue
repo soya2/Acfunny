@@ -34,20 +34,33 @@
           @handleClickIcon="clickIcon"
         />
       </div>
-      <div class="nav-item">
-        <img class="avatar-container" :src="userAvatar" >
+      <div class="nav-item" @click="clickIcon(4)">
+        <img
+          v-if="loginStatus"
+          class="avatar-container"
+          :src="userAvatar"
+        >
+        <icon-button
+          v-else
+          :button-object="navItemList[3]"
+        />
+        <transition name="vertical">
+          <user-plane ref="userRef" />
+        </transition>
       </div>
     </div>
   </nav>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted } from 'vue'
+import { defineComponent, ref, onMounted, computed } from 'vue'
+import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import IconButton, { IconButtonType } from '@/components/IconButton/IconButton.vue'
 import SearchBar from '@/components/SearchBar.vue'
 import History from './components/History.vue'
 import Notice from './components/Notice.vue'
+import UserPlane from './components/UserPlane.vue'
 
 import { getUserById } from '@/api/users'
 
@@ -57,15 +70,18 @@ export default defineComponent({
     IconButton,
     SearchBar,
     History,
-    Notice
+    Notice,
+    UserPlane
   },
   setup () {
     const historyRef = ref()
     const noticeRef = ref()
+    const userRef = ref()
     const navItemList = ref([
       { id: 1, icon: 'history', tip: '观看历史' },
       { id: 2, icon: 'comment', tip: '通知', count: 0 },
-      { id: 3, icon: 'paint-brush', tip: '创作' }
+      { id: 3, icon: 'paint-brush', tip: '创作' },
+      { id: 4, icon: 'user' }
     ] as Array<IconButtonType>)
 
     const router = useRouter()
@@ -74,9 +90,13 @@ export default defineComponent({
       switch (id) {
         case 1: historyRef.value.clickIcon(true); break
         case 2: noticeRef.value.clickIcon(true); break
-        case 3: router.push({ path: 'test' })
+        case 3: router.push({ path: 'test' }); break
+        case 4: userRef.value.clickIcon(true)
       }
     }
+
+    const store = useStore()
+    const loginStatus = computed(() => store.state.isLogin)
 
     const userAvatar = ref()
     onMounted(async () => {
@@ -88,9 +108,11 @@ export default defineComponent({
     return {
       historyRef,
       noticeRef,
+      userRef,
       navItemList,
       clickIcon,
       router,
+      loginStatus,
       userAvatar
     }
   }

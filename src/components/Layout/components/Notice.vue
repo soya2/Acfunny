@@ -5,27 +5,33 @@
     @click.stop
   >
     <div class="title">回复</div>
-    <div class="notice-item slide-border">
+    <div
+      v-for="item in noticeList"
+      :key=item.id
+      class="notice-item slide-border"
+    >
       <div class="item-detail">
-        <strong>{{ noticeList[0].userName }}</strong>
+        <strong>{{ item.replyUserName }}</strong>
         <span> 回复：</span>
-        <strong>{{ noticeList[0].content }}</strong>
+        <strong>{{ item.content }}</strong>
       </div>
-      <div class="item-date">{{ new Date(noticeList[0].date).toLocaleString() }}</div>
+      <div class="item-date">{{ new Date(item.date).toLocaleString() }}</div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, onMounted, onUnmounted } from 'vue'
+import { getNoticeByUserId } from '@/api/notice'
 
 export type NoticeItem = {
   id: number;
-  type: number;
-  userName: string;
-  address: string;
+  isRead: boolean;
+  userId: number;
+  replyUserId: number;
+  replyUserName: string;
   content: string;
-  date: number
+  date: number;
 }
 
 export default defineComponent({
@@ -50,16 +56,12 @@ export default defineComponent({
       window.removeEventListener('click', handleClick)
     })
 
-    const noticeList = ref([
-      {
-        id: 124124,
-        type: 1,
-        userName: 'Alice',
-        content: '回复内容回复内容回回复内容回复内容回复内容回复内容回复内容回复内容复内容回复内容回复内容',
-        address: '',
-        date: 412412314225
-      }
-    ] as Array<NoticeItem>)
+    const noticeList = ref([] as Array<NoticeItem>)
+    const getNoticeList = async (id: number) => {
+      const { data } = await getNoticeByUserId(id)
+      noticeList.value = data
+    }
+    getNoticeList(1)
 
     return {
       isVisible,
@@ -72,7 +74,8 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .rounded-container {
-  width: 300px;
+  width: 18vw;
+  overflow: hidden;
 }
 .title {
   margin-left: 8px;
@@ -80,7 +83,7 @@ export default defineComponent({
 }
 .notice-item {
   padding: 4px 8px;
-  border-radius: 16px;
+  border-radius: 8px;
   cursor: pointer;
   &:hover {
     background-color: rgb(247, 247, 247);
