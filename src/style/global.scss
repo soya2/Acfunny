@@ -19,7 +19,7 @@ input {
   padding-left: 8px;
   transition: .2s;
   outline: none;
-  background-color: rgb(251, 251, 251);
+  // background-color: rgb(251, 251, 251);
   caret-color: $mainColor;
   &:focus-visible {
     background-color: #fff;
@@ -27,5 +27,8 @@ input {
     & +button {
       color: $mainColor;
     }
+  }
+  &::placeholder {
+    color: $shadowColor;
   }
 }

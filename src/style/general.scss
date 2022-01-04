@@ -26,12 +26,13 @@
 .vertical-enter-active { animation: slide-vertical .2s; }
 .vertical-leave-active { animation: slide-vertical .2s reverse; }
 
+// button
 .btn-base {
   padding: 4px 16px;
   border-radius: 4px;
-  transition: .3s;
+  transition: .4s;
   outline: solid 3px transparent;
-  &:focus {
+  &:active {
     outline: solid 3px $shadowColor;
   }
 }
@@ -39,11 +40,25 @@
   @extend .btn-base;
   background-color: $mainColor;
   color: white;
-  &:focus { outline-color: rgba($mainColor, 0.32); }
+  &:active { outline-color: rgba($mainColor, 0.32); }
 }
 .btn-primary-plain {
   @extend .btn-primary;
   background-color: transparent;
   border: solid 1px $mainColor;
+  color: $mainColor;
+}
+
+// link
+.link-base {
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+.link-normal {
+  @extend .link-base;
+  color: gray;
+}
+.link-primary {
+  @extend .link-base;
   color: $mainColor;
 }

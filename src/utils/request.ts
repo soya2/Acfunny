@@ -1,4 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
+const successCode = [200, 201]
 
 export class Request {
   public static axiosInstance: AxiosInstance;
@@ -30,11 +31,11 @@ export class Request {
     // response 拦截
     this.axiosInstance.interceptors.response.use(
       (response: AxiosResponse) => {
-        if (response.status === 200) {
+        if (successCode.includes(response.status)) {
           return response.data
         } else {
           Request.errorHandle(response)
-          return response
+          return response.data
         }
       },
       (error) => {
@@ -54,7 +55,7 @@ export class Request {
       case 401: break
       case 403: break
       case 404: console.log('not found!'); break
-      default: console.log('connect error')
+      default:
     }
   }
 }

@@ -7,3 +7,11 @@ export function getUserById (id: number): Promise<any> {
     params: { id }
   })
 }
+
+export function login (info: { username: string, password: string }): Promise<any> {
+  return Request.axiosInstance({
+    url: '/users/login',
+    method: 'post',
+    data: info
+  })
+}

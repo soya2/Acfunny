@@ -99,11 +99,12 @@ export default defineComponent({
     const loginStatus = computed(() => store.state.isLogin)
 
     const userAvatar = ref()
-    onMounted(async () => {
+    const getUserInfo = async () => {
       const { data } = await getUserById(1)
       userAvatar.value = data.avatar
       navItemList.value[1].count = data.notice
-    })
+    }
+    if (loginStatus.value) getUserInfo()
 
     return {
       historyRef,
