@@ -4,25 +4,29 @@
     class="rounded-container"
     @click.stop
   >
-    <div v-if="!status" class="login-container">
+    <form v-if="!status" class="login-container">
       <h3>登录</h3>
-      <label>用户名：</label>
+      <label for="username">用户名：</label>
       <input
+        id="username"
+        required
         v-model="formData.username"
         placeholder="请使用用户名或邮箱登录"
       />
-      <label>密码：</label>
+      <label for="password">密码：</label>
       <input
+        id="password"
+        required
         v-model="formData.password"
         type="password"
         placeholder="请输入密码"
         @keyup.enter="handleLogin"
       />
       <div class="button-bar">
-        <button class="btn-primary-plain">注册</button>
+        <button class="btn-primary-plain" type="button" @click="handleRegister">注册</button>
         <button class="btn-primary" @click="handleLogin">登录</button>
       </div>
-    </div>
+    </form>
     <div v-else>
       <a class="link-normal" @click="handleLogout">登出</a>
     </div>
@@ -32,7 +36,9 @@
 <script lang="ts">
 import { defineComponent, ref, onMounted, onUnmounted, computed } from 'vue'
 import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
 import { login } from '@/api/users'
+import Message from '@/utils/message'
 
 export default defineComponent({
   name: 'UserPlane',
@@ -64,30 +70,40 @@ export default defineComponent({
 
     const store = useStore()
     const status = computed(() => store.state.isLogin)
+    const router = useRouter()
+
     const handleLogin = async () => {
       const { username, password } = formData.value
       if (username.trim() === '' || password.trim() === '') {
-        console.error('请正确填写用户名和密码')
+        Message.error('请正确填写用户名和密码')
         return false
       }
-      const { data } = await login({ username, password })
+      const { data, msg } = await login({ username, password })
       if (data === true) {
-        console.log('登录成功')
+        Message.success(msg)
         formData.value.username = ''
         formData.value.password = ''
+        window.localStorage.setItem('loginStatus', 'True')
         store.commit('changeLoginState', true)
+        router.push('/')
       } else {
-        console.error('登录失败')
+        Message.error(msg)
       }
     }
     const handleLogout = async () => {
       store.commit('changeLoginState', false)
     }
 
+    const handleRegister = () => {
+      router.push('/register')
+      handleClick()
+    }
+
     return {
       isVisible,
       clickIcon,
       handleLogin,
+      handleRegister,
       handleLogout,
       formData,
       status

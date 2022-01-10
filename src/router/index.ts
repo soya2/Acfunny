@@ -1,4 +1,5 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
+import { UserRoutes } from './Users'
 import Home from '../views/Home/index.vue'
 
 const routes: Array<RouteRecordRaw> = [
@@ -7,6 +8,7 @@ const routes: Array<RouteRecordRaw> = [
     name: 'Home',
     component: Home
   },
+  ...UserRoutes,
   {
     path: '/test',
     name: 'TestPage',

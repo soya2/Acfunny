@@ -23,6 +23,13 @@
   box-shadow: 0 8px 24px $shadowColor;
 }
 
+.base-container {
+  border-radius: 8px;
+  padding: 20px 32px;
+  background-color: white;
+  box-shadow: 0 4px 12px rgb(245, 245, 245), 0 1px 4px $shadowColor;
+}
+
 .vertical-enter-active { animation: slide-vertical .2s; }
 .vertical-leave-active { animation: slide-vertical .2s reverse; }
 

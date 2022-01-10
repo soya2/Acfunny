@@ -15,3 +15,11 @@ export function login (info: { username: string, password: string }): Promise<an
     data: info
   })
 }
+
+export function register (info: { username: string, password: string }): Promise<any> {
+  return Request.axiosInstance({
+    url: '/users/register',
+    method: 'post',
+    data: info
+  })
+}

@@ -53,7 +53,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted, computed } from 'vue'
+import { defineComponent, ref, computed } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import IconButton, { IconButtonType } from '@/components/IconButton/IconButton.vue'
@@ -96,6 +96,8 @@ export default defineComponent({
     }
 
     const store = useStore()
+    const localStoreStatus = window.localStorage.getItem('loginStatus')
+    if (localStoreStatus) store.commit('changeLoginState', true)
     const loginStatus = computed(() => store.state.isLogin)
 
     const userAvatar = ref()
@@ -156,6 +158,7 @@ nav {
       height: $navItemHeight;
       border-radius: 50%;
       background-color: gray;
+      cursor: pointer;
     }
   }
   .search-bar {
