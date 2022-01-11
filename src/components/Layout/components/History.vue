@@ -5,22 +5,35 @@
     @click.stop
   >
     <div class="title">浏览历史</div>
-    <div
-      v-for="item of historyList"
-      :key=item.id
-      class="history-item slide-border"
-    >
-      <img class="item-img" :src="item.img">
-      <div class="item-detail">
-        <div class="item-title">{{ item.title }}</div>
-        <div class="item-date">{{ item.date }}</div>
+    <div v-if="loginStatus">
+      <div v-if="historyList.length > 0">
+        <div
+          v-for="item of historyList"
+          :key=item.id
+          class="history-item slide-border"
+        >
+          <img class="item-img" :src="item.img">
+          <div class="item-detail">
+            <div class="item-title">{{ item.title }}</div>
+            <div class="item-date">{{ item.date }}</div>
+          </div>
+        </div>
       </div>
+      <div class="center-notice" v-else>
+        <font-awesome-icon icon="file" />
+        暂无记录
+      </div>
+    </div>
+    <div class="center-notice" v-else>
+      <font-awesome-icon icon="ban" />
+      请先登录
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted, onUnmounted } from 'vue'
+import { defineComponent, ref, onMounted, onUnmounted, computed } from 'vue'
+import { useStore } from 'vuex'
 
 export type HistoryItem = {
   id: number;
@@ -53,9 +66,13 @@ export default defineComponent({
 
     const historyList = ref([] as Array<HistoryItem>)
 
+    const store = useStore()
+    const loginStatus = computed(() => store.state.isLogin)
+
     return {
       isVisible,
       historyList,
+      loginStatus,
       clickIcon
     }
   }
@@ -98,5 +115,13 @@ export default defineComponent({
     font-size: 12px;
     color: #333;
   }
+}
+.center-notice {
+  margin-top: 30%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: gray;
+  cursor: default;
 }
 </style>

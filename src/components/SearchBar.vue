@@ -33,24 +33,6 @@ div {
   display: flex;
   align-items: center;
   justify-content: center;
-  input {
-    width: 100%;
-    height: @inputHeight;
-    border: 2px solid @borderColor;
-    border-radius: 6px;
-    padding-left: 8px;
-    transition: .2s;
-    outline: none;
-    background-color: rgb(251, 251, 251);
-    caret-color: @activeColor;
-    &:focus-visible {
-      background-color: #fff;
-      border-color: @activeColor;
-      & +button {
-        color: @activeColor;
-      }
-    }
-  }
   button {
     position: absolute;
     right: 6px;

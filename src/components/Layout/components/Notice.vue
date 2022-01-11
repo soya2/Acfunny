@@ -5,23 +5,36 @@
     @click.stop
   >
     <div class="title">回复</div>
-    <div
-      v-for="item in noticeList"
-      :key=item.id
-      class="notice-item slide-border"
-    >
-      <div class="item-detail">
-        <strong>{{ item.replyUserName }}</strong>
-        <span> 回复：</span>
-        <strong>{{ item.content }}</strong>
+    <div v-if="loginStatus">
+      <div v-if="noticeList.length > 0">
+        <div
+          v-for="item in noticeList"
+          :key=item.id
+          class="notice-item slide-border"
+        >
+          <div class="item-detail">
+            <strong>{{ item.replyUserName }}</strong>
+            <span> 回复：</span>
+            <strong>{{ item.content }}</strong>
+          </div>
+          <div class="item-date">{{ new Date(item.date).toLocaleString() }}</div>
+        </div>
       </div>
-      <div class="item-date">{{ new Date(item.date).toLocaleString() }}</div>
+      <div class="center-notice" v-else>
+        <font-awesome-icon icon="file" />
+        暂无通知
+      </div>
+    </div>
+    <div class="center-notice" v-else>
+      <font-awesome-icon icon="ban" />
+      请先登录
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted, onUnmounted } from 'vue'
+import { defineComponent, ref, onMounted, onUnmounted, computed } from 'vue'
+import { useStore } from 'vuex'
 import { getNoticeByUserId } from '@/api/notice'
 
 export type NoticeItem = {
@@ -56,15 +69,22 @@ export default defineComponent({
       window.removeEventListener('click', handleClick)
     })
 
+    const store = useStore()
+    const loginStatus = computed(() => store.state.isLogin)
+
     const noticeList = ref([] as Array<NoticeItem>)
     const getNoticeList = async (id: number) => {
       const { data } = await getNoticeByUserId(id)
       noticeList.value = data
     }
-    getNoticeList(1)
+    const userId = window.localStorage.getItem('userId')
+    if (userId !== '') {
+      getNoticeList(Number(userId))
+    }
 
     return {
       isVisible,
+      loginStatus,
       clickIcon,
       noticeList
     }
@@ -97,5 +117,13 @@ export default defineComponent({
     font-size: 12px;
     color: grey;
   }
+}
+.center-notice {
+  margin-top: 30%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: gray;
+  cursor: default;
 }
 </style>

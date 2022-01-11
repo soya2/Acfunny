@@ -97,16 +97,17 @@ export default defineComponent({
 
     const store = useStore()
     const localStoreStatus = window.localStorage.getItem('loginStatus')
-    if (localStoreStatus) store.commit('changeLoginState', true)
+    if (localStoreStatus === 'True') store.commit('changeLoginState', true)
     const loginStatus = computed(() => store.state.isLogin)
 
     const userAvatar = ref()
-    const getUserInfo = async () => {
-      const { data } = await getUserById(1)
+    const getUserInfo = async (id: number) => {
+      const { data } = await getUserById(id)
       userAvatar.value = data.avatar
       navItemList.value[1].count = data.notice
     }
-    if (loginStatus.value) getUserInfo()
+    const userId = window.localStorage.getItem('userId')
+    if (loginStatus.value && userId !== '') getUserInfo(Number(userId))
 
     return {
       historyRef,

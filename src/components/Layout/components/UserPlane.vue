@@ -63,8 +63,8 @@ export default defineComponent({
     })
 
     const formData = ref({
-      username: 'Alice',
-      password: '123456'
+      username: '',
+      password: ''
     })
     // 96b372c8042314c9ccde70eb601d4d89
 
@@ -79,11 +79,12 @@ export default defineComponent({
         return false
       }
       const { data, msg } = await login({ username, password })
-      if (data === true) {
+      if (data !== null) {
         Message.success(msg)
         formData.value.username = ''
         formData.value.password = ''
         window.localStorage.setItem('loginStatus', 'True')
+        window.localStorage.setItem('userId', data.id)
         store.commit('changeLoginState', true)
         router.push('/')
       } else {
@@ -92,6 +93,8 @@ export default defineComponent({
     }
     const handleLogout = async () => {
       store.commit('changeLoginState', false)
+      window.localStorage.setItem('loginStatus', 'False')
+      window.localStorage.setItem('userId', '')
     }
 
     const handleRegister = () => {
