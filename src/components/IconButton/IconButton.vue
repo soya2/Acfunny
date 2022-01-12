@@ -1,19 +1,21 @@
 <template>
-  <div
-    v-if="buttonObject.count > 0"
-    class="bubble"
-  />
-  <div
-    ref="icon"
-    class="icon-container slide-border"
-    @click="$emit('handleClickIcon', buttonObject.id)"
-  >
-    <font-awesome-icon :icon="buttonObject.icon" />
+  <div>
+    <div
+      v-if="buttonObject.count > 0"
+      class="bubble"
+    />
+    <div
+      ref="icon"
+      class="icon-container slide-border"
+      @click="$emit('handleClickIcon', buttonObject.id)"
+    >
+      <font-awesome-icon :icon="buttonObject.icon" />
+    </div>
+    <div
+      v-if="buttonObject.tip && buttonObject.tip !== ''"
+      class="tip"
+    >{{ buttonObject.tip }}</div>
   </div>
-  <div
-    v-if="buttonObject.tip && buttonObject.tip !== ''"
-    class="tip"
-  >{{ buttonObject.tip }}</div>
 </template>
 
 <script lang="ts">

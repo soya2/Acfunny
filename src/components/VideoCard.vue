@@ -11,10 +11,8 @@
 </template>
 
 <script lang="ts">
-import {
-  defineComponent,
-  PropType
-} from 'vue'
+import { defineComponent, PropType } from 'vue'
+import { useRouter } from 'vue-router'
 
 export interface VideoData {
   id: number;
@@ -33,8 +31,12 @@ export default defineComponent({
     }
   },
   setup () {
+    const router = useRouter()
     const handleClick = (id: number) => {
-      return id
+      router.push({
+        path: '/video',
+        query: { id }
+      })
     }
     return {
       handleClick

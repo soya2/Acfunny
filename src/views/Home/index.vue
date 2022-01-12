@@ -11,7 +11,6 @@
 import { defineComponent, toRefs, reactive, onBeforeMount } from 'vue'
 import VideoCardBar from './components/VideoCardBar.vue'
 import { VideoData } from '@/components/VideoCard.vue'
-import { getTestData } from '@/api/test'
 
 export default defineComponent({
   name: 'Home',
@@ -24,8 +23,6 @@ export default defineComponent({
     })
 
     onBeforeMount(async () => {
-      const res = await getTestData().catch(e => e)
-      console.log(res)
       data.userSubscriptionBar = [
         {
           id: 1,

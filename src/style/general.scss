@@ -69,3 +69,10 @@
   @extend .link-base;
   color: $mainColor;
 }
+
+.line {
+  height: .1rem;
+  width: 100%;
+  margin: .4rem 0;
+  background-color: $shadowColor;
+}

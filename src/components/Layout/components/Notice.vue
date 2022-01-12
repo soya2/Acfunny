@@ -55,11 +55,7 @@ export default defineComponent({
     const isClickIcon = ref(false)
     const clickIcon = (flag = false) => { isClickIcon.value = flag }
     const handleClick = () => {
-      if (!isVisible.value && isClickIcon.value) {
-        changeVisible(true)
-      } else {
-        changeVisible(false)
-      }
+      changeVisible(!isVisible.value && isClickIcon.value)
       clickIcon()
     }
     onMounted(() => {
