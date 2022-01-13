@@ -6,6 +6,11 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
     <title><%= htmlWebpackPlugin.options.title %></title>
+    <style>
+      #nprogress .spinner { display: none !important; }
+      #nprogress .bar { background: #fd4c5d !important; }
+      #nprogress .peg { box-shadow: 0 0 10px #fd4c5d, 0 0 5px #fd4c5d !important; }
+    </style>
   </head>
   <body>
     <noscript>

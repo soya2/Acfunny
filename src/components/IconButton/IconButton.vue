@@ -7,9 +7,17 @@
     <div
       ref="icon"
       class="icon-container slide-border"
-      @click="$emit('handleClickIcon', buttonObject.id)"
+      :class="{ 'checkbox': type === 'checkbox' }"
+      :style="{ color: color }"
+      @click="clickIcon"
+      @mousedown="handleMousedown(1)"
+      @mouseup="handleMousedown(0)"
     >
       <font-awesome-icon :icon="buttonObject.icon" />
+      <span
+        v-if="content"
+        class="checkbox-number"
+      >{{ content }}</span>
     </div>
     <div
       v-if="buttonObject.tip && buttonObject.tip !== ''"
@@ -19,13 +27,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, toRefs, reactive, PropType } from 'vue'
+import { defineComponent, ref, PropType, computed } from 'vue'
 
 export type IconButtonType = {
   id: number;
   icon: string;
+  color?: string;
+  type?: string | undefined;
   tip?: string | undefined;
-  count?: number | undefined
+  count?: number | undefined,
+  followNumber?: number;
 }
 
 export default defineComponent({
@@ -37,11 +48,30 @@ export default defineComponent({
     }
   },
   emits: ['handleClickIcon'],
-  setup () {
-    const data = reactive({
-    })
+  setup (props, context) {
+    const type = ref(props.buttonObject.type)
+    const content = ref(props.buttonObject.followNumber)
+    const isCheck = ref(false)
+    const isActive = ref(false)
+    const color = computed(() => isCheck.value || isActive.value ? props.buttonObject.color : '')
+    const handleMousedown = (type: number) => { isActive.value = type === 1 }
+
+    const clickIcon = () => {
+      if (type.value === 'checkbox') {
+        isCheck.value = !isCheck.value
+        const temp = content.value as number
+        content.value = isCheck.value ? temp + 1 : temp - 1
+      } else {
+        context.emit('handleClickIcon', props.buttonObject.id)
+      }
+    }
     return {
-      ...toRefs(data)
+      type,
+      content,
+      isCheck,
+      handleMousedown,
+      color,
+      clickIcon
     }
   }
 })
@@ -63,6 +93,14 @@ export default defineComponent({
   cursor: pointer;
   &:hover +.tip { opacity: 1; }
   &:active { color: @highLightColor; }
+}
+.checkbox {
+  width: fit-content;
+  padding: 0 .4rem;
+  border-radius: 24px;
+  .checkbox-number {
+    margin-left: .4rem;
+  }
 }
 
 .tip {
