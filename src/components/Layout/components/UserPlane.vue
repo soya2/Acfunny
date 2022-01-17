@@ -37,7 +37,7 @@
 import { defineComponent, ref, onMounted, onUnmounted, computed } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
-import { login } from '@/api/users'
+import UserApi from '@/api/users'
 import Message from '@/utils/message'
 
 export default defineComponent({
@@ -74,12 +74,11 @@ export default defineComponent({
         Message.error('请正确填写用户名和密码')
         return false
       }
-      const { data, msg } = await login({ username, password })
+      const { data, msg } = await UserApi.login({ username, password })
       if (data !== null) {
         Message.success(msg)
         formData.value.username = ''
         formData.value.password = ''
-        window.localStorage.setItem('loginStatus', 'True')
         window.localStorage.setItem('userId', data.id)
         store.commit('changeLoginState', true)
         router.push('/')
@@ -89,7 +88,6 @@ export default defineComponent({
     }
     const handleLogout = async () => {
       store.commit('changeLoginState', false)
-      window.localStorage.setItem('loginStatus', 'False')
       window.localStorage.setItem('userId', '')
     }
 

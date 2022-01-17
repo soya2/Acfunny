@@ -47,7 +47,7 @@ import Message from '@/utils/message'
 import IconButton, { IconButtonType } from '@/components/IconButton/IconButton.vue'
 import Button from '@/components/Button.vue'
 import Tag from '@/components/Tag.vue'
-import { getUserById } from '@/api/users'
+import UserApi from '@/api/users'
 
 export default defineComponent({
   name: 'Information',
@@ -92,7 +92,7 @@ export default defineComponent({
       name: ''
     })
     const getUserData = async () => {
-      const { code, data } = await getUserById(videoData.value.posterId)
+      const { code, data } = await UserApi.getUserById(videoData.value.posterId)
       if (code !== 0) Message.error('获取上传者信息失败')
       posterData.value = data
     }
@@ -106,11 +106,17 @@ export default defineComponent({
     const handleClickFollowButton = async () => {
       if (followButtonLoading.value) return
       followButtonLoading.value = true
-      setTimeout(() => {
+      try {
+        const { code, msg } = await UserApi.follow(videoData.value.posterId, isFollow.value)
+        if (code === 0) {
+          isFollow.value = !isFollow.value
+          Message.success(msg)
+        } else {
+          Message.error(msg)
+        }
+      } finally {
         followButtonLoading.value = false
-        isFollow.value = !isFollow.value
-        Message.success('关注成功')
-      }, 1000)
+      }
     }
 
     return {

@@ -1,4 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
+import Store from '@/store/index'
 const successCode = [200, 201]
 
 export class Request {
@@ -31,6 +32,10 @@ export class Request {
     // response 拦截
     this.axiosInstance.interceptors.response.use(
       (response: AxiosResponse) => {
+        const { expired } = response.data
+        if (!expired) {
+          Store.commit('changeLoginState', false)
+        }
         if (successCode.includes(response.status)) {
           return response.data
         } else {

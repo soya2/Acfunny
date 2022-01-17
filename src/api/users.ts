@@ -1,25 +1,46 @@
+import { loginRequired } from '@/utils/decorators'
 import { Request } from '@/utils/request'
 
-export function getUserById (id: number): Promise<any> {
-  return Request.axiosInstance({
-    url: '/users',
-    method: 'get',
-    params: { id }
-  })
+class UserApi {
+  getUserById (id: number): Promise<any> {
+    return Request.axiosInstance({
+      url: '/users',
+      method: 'get',
+      params: { id }
+    })
+  }
+
+  login (info: { username: string, password: string }): Promise<any> {
+    return Request.axiosInstance({
+      url: '/users/login',
+      method: 'post',
+      data: info
+    })
+  }
+
+  register (info: { username: string, password: string }): Promise<any> {
+    return Request.axiosInstance({
+      url: '/users/register',
+      method: 'post',
+      data: info
+    })
+  }
+
+  @loginRequired()
+  follow (targetId: number, isfollow: boolean): any {
+    return {
+      code: 0,
+      data: targetId,
+      msg: '关注成功'
+    }
+  }
+
+  test (): Promise<any> {
+    return Request.axiosInstance({
+      url: '/users/test',
+      method: 'get'
+    })
+  }
 }
 
-export function login (info: { username: string, password: string }): Promise<any> {
-  return Request.axiosInstance({
-    url: '/users/login',
-    method: 'post',
-    data: info
-  })
-}
-
-export function register (info: { username: string, password: string }): Promise<any> {
-  return Request.axiosInstance({
-    url: '/users/register',
-    method: 'post',
-    data: info
-  })
-}
+export default new UserApi()

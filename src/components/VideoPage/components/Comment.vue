@@ -2,18 +2,28 @@
   <div class="line" />
   <div class="header">
     <h2>评论</h2>
-    <button class="btn-primary">评论</button>
+    <button
+      class="btn-primary"
+      @click="handleClickComment"
+    >{{ isComment ? '发 送' : '评 论' }}</button>
   </div>
+  <textarea
+    class="comment-input"
+    :class="{ 'isComment': !isComment }"
+    type="textarea"
+    placeholder="请输入评论吧"
+  />
   <div
     v-for="item in commentList"
     :key="item.id"
-    class="comment"
   >
     <div class="item">
       <img :src="item.avatar" >
       <div class="right">
-        <span class="name">{{ item.username }}</span>
-        <span class="time">{{ item.time }}</span>
+        <div>
+          <span class="name">{{ item.username }}</span>
+          <span class="time">{{ item.time }}</span>
+        </div>
         <div class="content">{{ item.content }}</div>
       </div>
     </div>
@@ -47,8 +57,19 @@ export default defineComponent({
         time: '2022-01-14 10:24'
       }
     ])
+
+    const isComment = ref(false)
+    const handleClickComment = () => {
+      if (isComment.value) {
+        console.log('发送数据')
+      } else {
+      }
+      isComment.value = !isComment.value
+    }
     return {
-      commentList
+      commentList,
+      isComment,
+      handleClickComment
     }
   }
 })
@@ -62,6 +83,17 @@ export default defineComponent({
   button {
     width: 6rem;
   }
+}
+.comment-input {
+  height: 6rem;
+  padding: .4rem;
+  margin-bottom: 2rem;
+  resize: none;
+}
+.isComment {
+  opacity: 0;
+  height: 0;
+  margin: 0;
 }
 .item {
   display: flex;

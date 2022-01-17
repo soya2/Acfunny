@@ -5,7 +5,9 @@
       <Information :videoId="videoId" />
       <Comment :videoId="videoId" />
     </div>
-    <div class="right">right</div>
+    <div class="right">
+      <Recommend />
+    </div>
   </div>
 </template>
 
@@ -15,13 +17,15 @@ import { useRoute } from 'vue-router'
 import Video from './components/Video.vue'
 import Information from './components/Information.vue'
 import Comment from './components/Comment.vue'
+import Recommend from './components/Recommend.vue'
 
 export default defineComponent({
   name: 'VideoPage',
   components: {
     Video,
     Information,
-    Comment
+    Comment,
+    Recommend
   },
   setup () {
     const route = useRoute()
@@ -37,12 +41,9 @@ export default defineComponent({
 .col-main {
   display: grid;
   grid-template-columns: 75% 1fr;
-  padding: 1rem 4rem;
+  padding: 1rem 3rem;
   .left {
     padding-right: 2%;
-  }
-  .right {
-    border: 1px solid green;
   }
 }
 </style>

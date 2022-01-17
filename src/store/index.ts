@@ -7,6 +7,7 @@ export default createStore({
   },
   mutations: {
     changeLoginState (state, status: boolean) {
+      window.localStorage.setItem('loginStatus', status ? 'True' : 'False')
       state.isLogin = status
     }
   },

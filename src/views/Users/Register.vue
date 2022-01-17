@@ -39,7 +39,7 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import Message from '@/utils/message'
-import { register } from '@/api/users'
+import UserApi from '@/api/users'
 
 export default defineComponent({
   name: 'Register',
@@ -60,7 +60,7 @@ export default defineComponent({
         Message.error('两次输入的密码不一致')
         return false
       }
-      const { code, msg } = await register({ username, password })
+      const { code, msg } = await UserApi.register({ username, password })
       switch (code) {
         case 200: Message.success(msg); break
         case 401: Message.error(msg); break

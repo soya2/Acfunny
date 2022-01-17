@@ -61,8 +61,7 @@ import SearchBar from '@/components/SearchBar.vue'
 import History from './components/History.vue'
 import Notice from './components/Notice.vue'
 import UserPlane from './components/UserPlane.vue'
-
-import { getUserById } from '@/api/users'
+import UserApi from '@/api/users'
 
 export default defineComponent({
   name: 'NavBar',
@@ -102,7 +101,7 @@ export default defineComponent({
 
     const userAvatar = ref()
     const getUserInfo = async (id: number) => {
-      const { data } = await getUserById(id)
+      const { data } = await UserApi.getUserById(id)
       userAvatar.value = data.avatar
       navItemList.value[1].count = data.notice
     }

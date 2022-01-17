@@ -35,7 +35,7 @@
 <script lang="ts">
 import { defineComponent, ref, onMounted, onUnmounted, computed } from 'vue'
 import { useStore } from 'vuex'
-import { getNoticeByUserId } from '@/api/notice'
+import NoticeApi from '@/api/notice'
 
 export type NoticeItem = {
   id: number;
@@ -70,7 +70,7 @@ export default defineComponent({
 
     const noticeList = ref([] as Array<NoticeItem>)
     const getNoticeList = async (id: number) => {
-      const { data } = await getNoticeByUserId(id)
+      const { data } = await NoticeApi.getNoticeByUserId(id)
       noticeList.value = data
     }
     const userId = window.localStorage.getItem('userId')
