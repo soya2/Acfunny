@@ -12,7 +12,9 @@
         v-for="item in buttonBarList"
         :key="item.id"
         :buttonObject="item"
+        :followNumber="item.followNumber"
         class="button-item"
+        @handleClickIcon="handleClickIcon"
       />
     </div>
   </div>
@@ -48,6 +50,7 @@ import IconButton, { IconButtonType } from '@/components/IconButton/IconButton.v
 import Button from '@/components/Button.vue'
 import Tag from '@/components/Tag.vue'
 import UserApi from '@/api/users'
+import VideoApi from '@/api/video'
 
 export default defineComponent({
   name: 'Information',
@@ -64,39 +67,50 @@ export default defineComponent({
   },
   setup (props) {
     const videoData = ref({
-      id: props.videoId,
-      posterId: 1,
-      title: 'MV ～テレビアニメ「It\'ll be fine!」',
-      uploadTime: '2022-01-13 14:00',
-      playCount: 254676,
-      danmaku: 52,
-      comment: 13,
-      like: 421,
-      favorite: 54,
-      banana: 1453,
-      tags: ['ポケモン', 'プロジェクトポッチャマ', 'ポケットモンスター'],
-      summary: 'ポッチャマにフィーチャーしたスペシャルアニメーションMV「It\'ll be fine!」が公開！<br />アニメ「ポケットモンスター ダイヤモンド・パール」のエンディングテーマを繋いだ、スペシャルメドレーだよ。'
+      id: -1,
+      posterId: -1,
+      posterName: '',
+      title: '',
+      uploadTime: '',
+      playCount: 0,
+      danmaku: 0,
+      comment: 0,
+      like: 0,
+      favorite: 0,
+      banana: 0,
+      tags: [],
+      summary: ''
     })
-    // const { like, favorite, posterId, title } = videoData.value
-    document.title = videoData.value.title
-    const buttonBarList = ref([
-      { id: 1, icon: 'thumbs-up', tip: '点赞', color: '#fd4c5d', type: 'checkbox', followNumber: videoData.value.like },
-      { id: 2, icon: 'star', tip: '收藏', color: '#f3dc36', type: 'checkbox', followNumber: videoData.value.favorite },
-      { id: 5, icon: 'share', tip: '分享', color: 'green' },
-      { id: 6, icon: 'gavel', tip: '举报' }
-    ] as IconButtonType[])
-
     const posterData = ref({
       id: -1,
       avatar: '',
       name: ''
     })
-    const getUserData = async () => {
-      const { code, data } = await UserApi.getUserById(videoData.value.posterId)
+    const buttonBarList = ref([
+      { id: 1, icon: 'thumbs-up', tip: '点赞', color: '#fd4c5d', type: 'checkbox', followNumber: 0 },
+      { id: 2, icon: 'star', tip: '收藏', color: '#f3dc36', type: 'checkbox', followNumber: 0 },
+      { id: 5, icon: 'share', tip: '分享', color: 'green' },
+      { id: 6, icon: 'gavel', tip: '举报' }
+    ] as IconButtonType[])
+
+    const getUserData = async (id: number) => {
+      const { code, data } = await UserApi.getUserById(id)
       if (code !== 0) Message.error('获取上传者信息失败')
       posterData.value = data
     }
-    getUserData()
+    const getVideoData = async (id: number) => {
+      const { code, data, msg } = await VideoApi.getVideoById(id)
+      if (code === 0) {
+        videoData.value = data
+        document.title = videoData.value.title
+        buttonBarList.value[0].followNumber = data.like
+        buttonBarList.value[1].followNumber = data.favorite
+        await getUserData(videoData.value.posterId)
+      } else {
+        Message.error(msg)
+      }
+    }
+    getVideoData(props.videoId)
 
     const followButtonLoading = ref(false)
     const isFollow = ref(false)
@@ -119,6 +133,14 @@ export default defineComponent({
       }
     }
 
+    const handleClickIcon = async (id: number, isCheck: boolean) => {
+      const target = buttonBarList.value.find(item => item.id === id)
+      if (target && isCheck !== undefined) {
+        const t = isCheck ? 1 : -1
+        target.followNumber += t
+      }
+    }
+
     return {
       videoData,
       posterData,
@@ -126,7 +148,8 @@ export default defineComponent({
       followButtonLoading,
       isFollow,
       followContent,
-      handleClickFollowButton
+      handleClickFollowButton,
+      handleClickIcon
     }
   }
 })

@@ -87,8 +87,14 @@ export default defineComponent({
       }
     }
     const handleLogout = async () => {
-      store.commit('changeLoginState', false)
-      window.localStorage.setItem('userId', '')
+      const id = window.localStorage.getItem('userId')
+      const { code, msg } = await UserApi.logout(Number(id))
+      if (code === 0) {
+        store.commit('changeLoginState', false)
+        window.localStorage.setItem('userId', '')
+      } else {
+        Message.error(msg)
+      }
     }
 
     const handleRegister = () => {

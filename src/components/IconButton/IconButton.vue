@@ -15,9 +15,9 @@
     >
       <font-awesome-icon :icon="buttonObject.icon" />
       <span
-        v-if="content"
+        v-if="followNumber"
         class="checkbox-number"
-      >{{ content }}</span>
+      >{{ followNumber }}</span>
     </div>
     <div
       v-if="buttonObject.tip && buttonObject.tip !== ''"
@@ -36,7 +36,7 @@ export type IconButtonType = {
   type?: string | undefined;
   tip?: string | undefined;
   count?: number | undefined,
-  followNumber?: number;
+  followNumber: number;
 }
 
 export default defineComponent({
@@ -45,12 +45,15 @@ export default defineComponent({
     buttonObject: {
       type: Object as PropType<IconButtonType>,
       required: true
+    },
+    followNumber: {
+      type: Number,
+      default: 0
     }
   },
   emits: ['handleClickIcon'],
   setup (props, context) {
     const type = ref(props.buttonObject.type)
-    const content = ref(props.buttonObject.followNumber)
     const isCheck = ref(false)
     const isActive = ref(false)
     const color = computed(() => isCheck.value || isActive.value ? props.buttonObject.color : '')
@@ -59,15 +62,13 @@ export default defineComponent({
     const clickIcon = () => {
       if (type.value === 'checkbox') {
         isCheck.value = !isCheck.value
-        const temp = content.value as number
-        content.value = isCheck.value ? temp + 1 : temp - 1
+        context.emit('handleClickIcon', props.buttonObject.id, isCheck.value)
       } else {
         context.emit('handleClickIcon', props.buttonObject.id)
       }
     }
     return {
       type,
-      content,
       isCheck,
       handleMousedown,
       color,

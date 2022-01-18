@@ -18,6 +18,14 @@ class UserApi {
     })
   }
 
+  logout (id: number): Promise<any> {
+    return Request.axiosInstance({
+      url: '/users/logout',
+      method: 'get',
+      params: { id }
+    })
+  }
+
   register (info: { username: string, password: string }): Promise<any> {
     return Request.axiosInstance({
       url: '/users/register',
