@@ -105,6 +105,7 @@ export default defineComponent({
         document.title = videoData.value.title
         buttonBarList.value[0].followNumber = data.like
         buttonBarList.value[1].followNumber = data.favorite
+        await VideoApi.addVideoPalyCount(videoData.value.id)
         await getUserData(videoData.value.posterId)
       } else {
         Message.error(msg)

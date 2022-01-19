@@ -8,6 +8,7 @@
     >{{ isComment ? '发 送' : '评 论' }}</button>
   </div>
   <textarea
+    v-model="commentContent"
     class="comment-input"
     :class="{ 'isComment': !isComment }"
     type="textarea"
@@ -18,10 +19,10 @@
     :key="item.id"
   >
     <div class="item">
-      <img :src="item.avatar" >
+      <img :src="item.posterAvatar" >
       <div class="right">
         <div>
-          <span class="name">{{ item.username }}</span>
+          <span class="name">{{ item.posterName }}</span>
           <span class="time">{{ item.time }}</span>
         </div>
         <div class="content">{{ item.content }}</div>
@@ -32,6 +33,9 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
+import Message from '@/utils/message'
+import VideoApi from '@/api/video'
+
 export default defineComponent({
   name: 'Comment',
   props: {
@@ -40,34 +44,40 @@ export default defineComponent({
       default: -1
     }
   },
-  setup () {
-    const commentList = ref([
-      {
-        id: 1,
-        username: 'Bob',
-        content: 'this is nice video',
-        avatar: 'https://i.pixiv.re/img-original/img/2022/01/12/22/43/11/95485788_p0.jpg',
-        time: '2022-01-14 10:23'
-      },
-      {
-        id: 125,
-        username: 'admin',
-        content: 'this is nice video 2',
-        avatar: 'https://proxy-jp1.pixivel.moe/c/600x1200_90_webp/img-master/img/2022/01/05/00/04/19/95304888_p0_master1200.jpg',
-        time: '2022-01-14 10:24'
+  setup (props) {
+    const commentList = ref([])
+    const getCommentList = async (id: number = props.videoId) => {
+      const { code, data, msg } = await VideoApi.getCommentList(id)
+      if (code === 0 && data) {
+        commentList.value = data
+      } else {
+        Message.error(msg)
       }
-    ])
+    }
+    getCommentList()
 
+    const commentContent = ref('')
     const isComment = ref(false)
-    const handleClickComment = () => {
+    const handleClickComment = async () => {
       if (isComment.value) {
-        console.log('发送数据')
+        const { code, data, msg } = await VideoApi.addComment({
+          videoId: props.videoId,
+          posterId: Number(window.localStorage.getItem('userId')),
+          content: commentContent.value
+        })
+        if (code === 0 && data) {
+          Message.success(msg)
+          await getCommentList()
+        } else {
+          Message.error(msg)
+        }
       } else {
       }
       isComment.value = !isComment.value
     }
     return {
       commentList,
+      commentContent,
       isComment,
       handleClickComment
     }
