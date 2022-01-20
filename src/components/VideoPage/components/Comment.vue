@@ -2,10 +2,18 @@
   <div class="line" />
   <div class="header">
     <h2>评论</h2>
-    <button
-      class="btn-primary"
-      @click="handleClickComment"
-    >{{ isComment ? '发 送' : '评 论' }}</button>
+    <div>
+      <button
+        v-show="cancelButton"
+        class="btn-primary-plain"
+        style="margin-right: .4rem;"
+        @click="handleClickCancel"
+      >关闭</button>
+      <button
+        class="btn-primary"
+        @click="handleClickComment"
+      >{{ isComment ? '发 送' : '评 论' }}</button>
+    </div>
   </div>
   <textarea
     v-model="commentContent"
@@ -23,7 +31,7 @@
       <div class="right">
         <div>
           <span class="name">{{ item.posterName }}</span>
-          <span class="time">{{ item.time }}</span>
+          <span class="time">{{ dateParse(item.time) }}</span>
         </div>
         <div class="content">{{ item.content }}</div>
       </div>
@@ -32,7 +40,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, onMounted } from 'vue'
+import { dateParse } from '@/utils/index'
 import Message from '@/utils/message'
 import VideoApi from '@/api/video'
 
@@ -54,12 +63,22 @@ export default defineComponent({
         Message.error(msg)
       }
     }
-    getCommentList()
+    onMounted(() => {
+      getCommentList()
+    })
 
+    const cancelButton = ref(false)
+    const handleClickCancel = () => {
+      isComment.value = false
+      cancelButton.value = false
+    }
     const commentContent = ref('')
     const isComment = ref(false)
     const handleClickComment = async () => {
       if (isComment.value) {
+        if (commentContent.value.trim() === '') {
+          return Message.info('评论内容不能为空')
+        }
         const { code, data, msg } = await VideoApi.addComment({
           videoId: props.videoId,
           posterId: Number(window.localStorage.getItem('userId')),
@@ -69,17 +88,21 @@ export default defineComponent({
           Message.success(msg)
           await getCommentList()
         } else {
-          Message.error(msg)
+          return Message.error(msg)
         }
       } else {
+        cancelButton.value = true
       }
       isComment.value = !isComment.value
     }
     return {
       commentList,
+      cancelButton,
       commentContent,
       isComment,
-      handleClickComment
+      handleClickComment,
+      handleClickCancel,
+      dateParse
     }
   }
 })
