@@ -35,12 +35,16 @@ class UserApi {
   }
 
   @loginRequired()
-  follow (targetId: number, isfollow: boolean): any {
-    return {
-      code: 0,
-      data: targetId,
-      msg: '关注成功'
-    }
+  follow (userId: string | number, posterId: string | number, type: boolean): any {
+    return Request.axiosInstance({
+      url: 'users/follow',
+      method: 'post',
+      data: {
+        userId,
+        posterId,
+        type
+      }
+    })
   }
 
   test (): Promise<any> {

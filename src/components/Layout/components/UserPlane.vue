@@ -23,12 +23,19 @@
         @keyup.enter="handleLogin"
       />
       <div class="button-bar">
-        <button class="btn-primary-plain" type="button" @click="handleRegister">注册</button>
+        <button class="btn-primary-plain" type="button" @click="routePush('/register')">注册</button>
         <button class="btn-primary" @click="handleLogin">登录</button>
       </div>
     </form>
-    <div v-else>
-      <a class="link-normal" @click="handleLogout">登出</a>
+    <div class="personal-container" v-else>
+      <div @click="routePush(`/personal-center?id=${userId}`)">
+        <font-awesome-icon icon="user" />
+        个人中心
+      </div>
+      <div @click="handleLogout">
+        <font-awesome-icon icon="reply" />
+        登出
+      </div>
     </div>
   </div>
 </template>
@@ -80,8 +87,10 @@ export default defineComponent({
         formData.value.username = ''
         formData.value.password = ''
         window.localStorage.setItem('userId', data.id)
+        window.localStorage.setItem('token', data.token)
         store.commit('changeLoginState', true)
         router.push('/')
+        handleClick()
       } else {
         Message.error(msg)
       }
@@ -97,8 +106,9 @@ export default defineComponent({
       }
     }
 
-    const handleRegister = () => {
-      router.push('/register')
+    const userId = Number(window.localStorage.getItem('userId'))
+    const routePush = (url: string) => {
+      router.push(url)
       handleClick()
     }
 
@@ -106,8 +116,9 @@ export default defineComponent({
       isVisible,
       clickIcon,
       handleLogin,
-      handleRegister,
       handleLogout,
+      routePush,
+      userId,
       formData,
       status
     }
@@ -117,10 +128,12 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .rounded-container {
+  height: fit-content;
   width: 18vw;
   overflow: hidden;
 }
 .login-container {
+  margin-bottom: 2rem;
   input {
     width: 95%;
   }
@@ -131,6 +144,17 @@ export default defineComponent({
     button {
       width: 48%;
     }
+  }
+}
+.personal-container > *{
+  border-radius: 6px;
+  margin-bottom: .4rem;
+  padding: .2rem .6rem;
+  transition: .2s;
+  cursor: pointer;
+  &:hover {
+    color: red;
+    background-color: rgba(233, 233, 233, 0.6);
   }
 }
 </style>

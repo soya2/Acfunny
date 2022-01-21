@@ -23,7 +23,10 @@
   <div class="poster-bar">
     <div class="avatar">
       <img :src="posterData.avatar" >
-      <span>{{ posterData.name }}</span>
+      <div class="poster-info">
+        <div>{{ posterData.name }}</div>
+        <div class="introduction">{{ posterData.introduction }}</div>
+      </div>
     </div>
     <Button
       :content="followContent"
@@ -94,8 +97,32 @@ export default defineComponent({
       { id: 5, icon: 'share', tip: '分享', color: 'green' },
       { id: 6, icon: 'gavel', tip: '举报' }
     ] as IconButtonType[])
-    const buttonList: any[] = []
-    const setButtonsRef = (el: any) => buttonList.push(el)
+    const buttonList: { isCheck: boolean }[] = []
+    const setButtonsRef = (el: { isCheck: boolean }) => buttonList.push(el)
+
+    const followButtonLoading = ref(false)
+    const isFollow = ref(false)
+    const followContent = computed(() => {
+      return isFollow.value ? '已关注' : '关注'
+    })
+    const handleClickFollowButton = async () => {
+      if (followButtonLoading.value) return
+      followButtonLoading.value = true
+      try {
+        const { code, msg } = await UserApi.follow(
+          Number(window.localStorage.getItem('userId')),
+          videoData.value.posterId,
+          !isFollow.value
+        )
+        if (code === 0) {
+          isFollow.value = !isFollow.value
+        } else {
+          Message.error(msg)
+        }
+      } finally {
+        followButtonLoading.value = false
+      }
+    }
 
     const getUserData = async (id: number) => {
       const { code, data } = await UserApi.getUserById(id)
@@ -110,7 +137,8 @@ export default defineComponent({
         buttonBarList.value[0].followNumber = data.like
         buttonBarList.value[1].followNumber = data.favorite
         buttonList[0].isCheck = data.isLike
-        buttonList[1].isCheck = data.favorite
+        buttonList[1].isCheck = data.isFavorite
+        isFollow.value = data.isFollow
         await VideoApi.addVideoPalyCount(videoData.value.id)
         await getUserData(videoData.value.posterId)
       } else {
@@ -120,27 +148,6 @@ export default defineComponent({
     onMounted(() => {
       getVideoData(props.videoId)
     })
-
-    const followButtonLoading = ref(false)
-    const isFollow = ref(false)
-    const followContent = computed(() => {
-      return isFollow.value ? '已关注' : '关注'
-    })
-    const handleClickFollowButton = async () => {
-      if (followButtonLoading.value) return
-      followButtonLoading.value = true
-      try {
-        const { code, msg } = await UserApi.follow(videoData.value.posterId, isFollow.value)
-        if (code === 0) {
-          isFollow.value = !isFollow.value
-          Message.success(msg)
-        } else {
-          Message.error(msg)
-        }
-      } finally {
-        followButtonLoading.value = false
-      }
-    }
 
     const handleClickIcon = async (id: number, isCheck: boolean) => {
       const target = buttonBarList.value.find(item => item.id === id)
@@ -152,7 +159,10 @@ export default defineComponent({
             videoData.value.id,
             isCheck
           )
-          if (code !== 0) return Message.error(msg)
+          if (code !== 0) {
+            buttonList[0].isCheck = false
+            return Message.error(msg)
+          }
         }
         if (id === 2) {
           const { code, msg } = await VideoApi.favoriteVideo(
@@ -160,7 +170,10 @@ export default defineComponent({
             videoData.value.id,
             isCheck
           )
-          if (code !== 0) return Message.error(msg)
+          if (code !== 0) {
+            buttonList[1].isCheck = false
+            return Message.error(msg)
+          }
         }
         target.followNumber += t
       }
@@ -211,10 +224,17 @@ export default defineComponent({
       height: 4rem;
       border-radius: 50%;
     }
-    span {
+    .poster-info {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
       margin-left: 1rem;
       font-size: 1.4rem;
       font-weight: bold;
+      .introduction {
+        font-size: 1rem;
+        font-weight: normal;
+      }
     }
   }
 }

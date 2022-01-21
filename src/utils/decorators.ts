@@ -3,6 +3,7 @@ import Store from '@/store/index'
 export const loginRequired = () => {
   return function (target: unknown, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor {
     const method = descriptor.value
+    document.cookie = `token=${window.localStorage.getItem('token')}`
     descriptor.value = function (...args: any[]) {
       const status = Store.state.isLogin
       if (status) {

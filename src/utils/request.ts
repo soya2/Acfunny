@@ -35,6 +35,7 @@ export class Request {
         const { expired } = response.data
         if (!expired) {
           Store.commit('changeLoginState', false)
+          window.localStorage.setItem('token', '')
         }
         if (successCode.includes(response.status)) {
           return response.data

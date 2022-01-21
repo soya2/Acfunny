@@ -1,5 +1,5 @@
 import { RouteRecordRaw } from 'vue-router'
-import VideoPage from '@/components/VideoPage/index.vue'
+import VideoPage from '@/views/VideoPage/index.vue'
 
 export const VideoRoutes: Array<RouteRecordRaw> = [
   {
