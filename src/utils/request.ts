@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 import Store from '@/store/index'
-const successCode = [200, 201]
+import Message from '@/utils/message'
 
 export class Request {
   public static axiosInstance: AxiosInstance;
@@ -8,9 +8,9 @@ export class Request {
   public static init (): AxiosInstance {
     this.axiosInstance = axios.create({
       baseURL: '/api',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
-      },
+      // headers: {
+      //   'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
+      // },
       timeout: 5000
     })
     this.initInterceptors()
@@ -32,16 +32,17 @@ export class Request {
     // response 拦截
     this.axiosInstance.interceptors.response.use(
       (response: AxiosResponse) => {
-        const { expired } = response.data
-        if (!expired) {
+        const { code, msg } = response.data
+        if (code === 403) {
           Store.commit('changeLoginState', false)
-          window.localStorage.setItem('token', '')
+          Message.error(msg)
         }
-        if (successCode.includes(response.status)) {
+        if (code === 0) {
           return response.data
         } else {
           Request.errorHandle(response)
-          return response.data
+          Message.error(msg)
+          return Promise.reject(msg)
         }
       },
       (error) => {

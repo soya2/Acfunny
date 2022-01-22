@@ -79,17 +79,14 @@ export default defineComponent({
         if (commentContent.value.trim() === '') {
           return Message.info('评论内容不能为空')
         }
-        const { code, data, msg } = await VideoApi.addComment({
-          videoId: props.videoId,
-          posterId: Number(window.localStorage.getItem('userId')),
-          content: commentContent.value
-        })
-        if (code === 0 && data) {
+        try {
+          const { msg } = await VideoApi.addComment(
+            props.videoId,
+            commentContent.value
+          )
           Message.success(msg)
           await getCommentList()
-        } else {
-          return Message.error(msg)
-        }
+        } catch {}
       } else {
         cancelButton.value = true
       }

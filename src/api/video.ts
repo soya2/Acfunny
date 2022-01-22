@@ -30,33 +30,38 @@ class VideoApi {
   }
 
   @loginRequired()
-  addComment (commentData: {
-    videoId: number,
-    posterId: number,
-    content: string
-  }): Promise<any> {
+  addComment (videoId: number, content: string): Promise<any> {
+    const posterId = Number(window.localStorage.getItem('userId'))
     return Request.axiosInstance({
       url: 'video/addComment',
       method: 'post',
-      data: commentData
+      data: { videoId, posterId, content }
     })
   }
 
   @loginRequired()
-  likeVideo (userId: number, videoId: number, type: boolean): Promise<any> {
+  likeVideo (videoId: number, type: boolean): Promise<any> {
     return Request.axiosInstance({
       url: 'video/like',
       method: 'post',
-      data: { userId, videoId, type }
+      data: {
+        userId: Number(window.localStorage.getItem('userId')),
+        videoId,
+        type
+      }
     })
   }
 
   @loginRequired()
-  favoriteVideo (userId: number, videoId: number, type: boolean): Promise<any> {
+  favoriteVideo (videoId: number, type: boolean): Promise<any> {
     return Request.axiosInstance({
       url: 'video/favorite',
       method: 'post',
-      data: { userId, videoId, type }
+      data: {
+        userId: Number(window.localStorage.getItem('userId')),
+        videoId,
+        type
+      }
     })
   }
 }

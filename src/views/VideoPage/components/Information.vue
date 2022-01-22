@@ -49,7 +49,6 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed, onMounted } from 'vue'
-import Message from '@/utils/message'
 import { dateParse } from '@/utils/index'
 import IconButton, { IconButtonType } from '@/components/IconButton/IconButton.vue'
 import Button from '@/components/Button.vue'
@@ -109,29 +108,20 @@ export default defineComponent({
       if (followButtonLoading.value) return
       followButtonLoading.value = true
       try {
-        const { code, msg } = await UserApi.follow(
-          Number(window.localStorage.getItem('userId')),
-          videoData.value.posterId,
-          !isFollow.value
-        )
-        if (code === 0) {
-          isFollow.value = !isFollow.value
-        } else {
-          Message.error(msg)
-        }
-      } finally {
+        await UserApi.follow(videoData.value.posterId, !isFollow.value)
+        isFollow.value = !isFollow.value
+      } catch {} finally {
         followButtonLoading.value = false
       }
     }
 
     const getUserData = async (id: number) => {
-      const { code, data } = await UserApi.getUserById(id)
-      if (code !== 0) Message.error('获取上传者信息失败')
+      const { data } = await UserApi.getUserById(id)
       posterData.value = data
     }
     const getVideoData = async (id: number) => {
-      const { code, data, msg } = await VideoApi.getVideoById(id)
-      if (code === 0) {
+      try {
+        const { data } = await VideoApi.getVideoById(id)
         videoData.value = data
         document.title = videoData.value.title
         buttonBarList.value[0].followNumber = data.like
@@ -141,41 +131,25 @@ export default defineComponent({
         isFollow.value = data.isFollow
         await VideoApi.addVideoPalyCount(videoData.value.id)
         await getUserData(videoData.value.posterId)
-      } else {
-        Message.error(msg)
-      }
+      } catch {}
     }
     onMounted(() => {
       getVideoData(props.videoId)
     })
 
     const handleClickIcon = async (id: number, isCheck: boolean) => {
-      const target = buttonBarList.value.find(item => item.id === id)
-      if (target && isCheck !== undefined) {
-        const t = isCheck ? 1 : -1
-        if (id === 1) {
-          const { code, msg } = await VideoApi.likeVideo(
-            Number(window.localStorage.getItem('userId')),
-            videoData.value.id,
-            isCheck
-          )
-          if (code !== 0) {
-            buttonList[0].isCheck = false
-            return Message.error(msg)
+      const index = buttonBarList.value.findIndex(item => item.id === id)
+      if (buttonBarList.value[index] && isCheck !== undefined) {
+        try {
+          const t = isCheck ? 1 : -1
+          switch (id) {
+            case 1: await VideoApi.likeVideo(videoData.value.id, isCheck); break
+            case 2: await VideoApi.favoriteVideo(videoData.value.id, isCheck); break
           }
+          buttonBarList.value[index].followNumber += t
+        } catch {
+          buttonList[index].isCheck = false
         }
-        if (id === 2) {
-          const { code, msg } = await VideoApi.favoriteVideo(
-            Number(window.localStorage.getItem('userId')),
-            videoData.value.id,
-            isCheck
-          )
-          if (code !== 0) {
-            buttonList[1].isCheck = false
-            return Message.error(msg)
-          }
-        }
-        target.followNumber += t
       }
     }
 

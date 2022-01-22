@@ -34,23 +34,27 @@ class UserApi {
     })
   }
 
-  @loginRequired()
-  follow (userId: string | number, posterId: string | number, type: boolean): any {
+  isFollow (posterId: number): Promise<any> {
     return Request.axiosInstance({
-      url: 'users/follow',
-      method: 'post',
-      data: {
-        userId,
-        posterId,
-        type
+      url: 'users/isFollow',
+      method: 'get',
+      params: {
+        userId: Number(window.localStorage.getItem('userId')),
+        posterId
       }
     })
   }
 
-  test (): Promise<any> {
+  @loginRequired()
+  follow (posterId: string | number, type: boolean): Promise<any> {
     return Request.axiosInstance({
-      url: '/users/test',
-      method: 'get'
+      url: 'users/follow',
+      method: 'post',
+      data: {
+        userId: Number(window.localStorage.getItem('userId')),
+        posterId,
+        type
+      }
     })
   }
 }

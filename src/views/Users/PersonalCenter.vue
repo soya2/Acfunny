@@ -8,12 +8,14 @@
     @handleChangeTab="handleChangeTab"
   />
   <div class="content-container">
-    <user-info />
+    <user-info
+      v-show="isActiveTab === 1" :userId="userId"
+    />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import Tabs, { TabsOptions } from '@/components/Tabs.vue'
 import UserInfo from './components/UserInfo.vue'
@@ -25,8 +27,9 @@ export default defineComponent({
   },
   setup () {
     const route = useRoute()
-    const userId = route.query.id
+    const userId = Number(route.query.id)
 
+    const isActiveTab = ref(1)
     const tabsList = ref([
       { id: 1, name: '首页' },
       { id: 2, name: '视频' },
@@ -34,8 +37,13 @@ export default defineComponent({
       { id: 4, name: '历史记录' }
     ] as TabsOptions[])
     const handleChangeTab = (id: number) => {
-      console.log(id)
+      isActiveTab.value = id
     }
+
+    const userInfoRef = ref()
+    watch(route.query, (oldVal, newVal) => {
+      userInfoRef.value.getUserInfo(newVal.id)
+    })
 
     const userData = ref({
       banner: 'https://imgs.aixifan.com/newUpload/1046727_bbffc13f6d2443aebf74c4ecfb6d1697.jpeg.jpeg'
@@ -44,7 +52,10 @@ export default defineComponent({
     return {
       tabsList,
       handleChangeTab,
-      userData
+      userData,
+      userId,
+      isActiveTab,
+      userInfoRef
     }
   }
 })
@@ -61,6 +72,6 @@ export default defineComponent({
   justify-content: center;
   background-color: white;
   padding: .4rem 1rem;
-  & > * { width: 80%; }
+  & > * { width: 70%; }
 }
 </style>
