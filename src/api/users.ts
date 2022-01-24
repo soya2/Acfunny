@@ -10,6 +10,14 @@ class UserApi {
     })
   }
 
+  getUserInfoById (id: number): Promise<any> {
+    return Request.axiosInstance({
+      url: '/users/userInfo',
+      method: 'get',
+      params: { id }
+    })
+  }
+
   login (info: { username: string, password: string }): Promise<any> {
     return Request.axiosInstance({
       url: '/users/login',

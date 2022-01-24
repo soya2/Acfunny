@@ -2,8 +2,8 @@
   <div class="col-main">
     <div class="left">
       <Video />
-      <Information :videoId="videoId" />
-      <Comment :videoId="videoId" />
+      <Information ref="infoRef" :videoId="videoId" />
+      <Comment ref="commentRef" :videoId="videoId" />
     </div>
     <div class="right">
       <Recommend />
@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import Video from './components/Video.vue'
 import Information from './components/Information.vue'
@@ -29,9 +29,20 @@ export default defineComponent({
   },
   setup () {
     const route = useRoute()
-    const videoId = Number(route.query.id)
+    const videoId = ref(Number(route.query.id))
+
+    const infoRef = ref()
+    const commentRef = ref()
+    watch(route, (newVal) => {
+      if (newVal.path !== '/video') return
+      videoId.value = Number(newVal.query.id)
+      infoRef.value.getVideoData(videoId.value)
+      commentRef.value.getCommentList(videoId.value)
+    })
     return {
-      videoId
+      videoId,
+      infoRef,
+      commentRef
     }
   }
 })

@@ -27,8 +27,8 @@ export default defineComponent({
         {
           id: 1,
           title: 'this is a video title',
-          poster: 'admin',
-          url: 'https://scpic.chinaz.net/files/pic/pic9/201901/zzpic16289.jpg',
+          posterName: 'admin',
+          cover: 'https://scpic.chinaz.net/files/pic/pic9/201901/zzpic16289.jpg',
           isLive: true
         }
       ]

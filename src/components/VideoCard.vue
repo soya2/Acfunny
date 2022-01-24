@@ -1,12 +1,37 @@
 <template>
-  <div
-    class="card-container slide-border"
-    @click="handleClick(videoData.id)"
-  >
-    <img :src="videoData.url"  alt="no-image"/><br />
-    <div v-if="videoData.isLive" class="is-live">Live</div>
-    <span class="vc-title">{{ videoData.title }}</span>
-    <span class="vc-poster">{{ videoData.poster }}</span>
+  <div>
+    <div
+      v-if="type === 'vertical'"
+      class="card-container slide-border"
+    >
+      <img
+        :src="videoData.cover"
+        alt="no-image"
+        @click="handleClick(videoData.id)"
+      /><br />
+      <!-- <div v-if="videoData.isLive" class="is-live">Live</div> -->
+      <span
+        class="vc-title"
+        @click="handleClick(videoData.id)"
+      >{{ videoData.title }}</span>
+      <span class="vc-poster">{{ videoData.posterName }}</span>
+    </div>
+    <div
+      v-if="type === 'horizontal'"
+      class="recommend-item slide-border"
+    >
+      <img
+        :src="videoData.cover"
+        @click="handleClick(videoData.id)"
+      />
+      <div class="item-info">
+        <span
+          class="title"
+          @click="handleClick(videoData.id)"
+        >{{ videoData.title }}</span>
+        <span class="poster">{{ videoData.posterName }}</span>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -17,14 +42,18 @@ import { useRouter } from 'vue-router'
 export interface VideoData {
   id: number;
   title: string;
-  poster: string;
-  url: string;
+  posterName: string;
+  cover: string;
   isLive?: boolean;
 }
 
 export default defineComponent({
   name: 'VideoCard',
   props: {
+    type: {
+      type: String,
+      default: 'vertical'
+    },
     videoData: {
       type: Object as PropType<VideoData>,
       required: true
@@ -83,6 +112,35 @@ export default defineComponent({
   .vc-poster {
     text-align: justify;
     color: rgb(150, 150, 150);
+  }
+}
+.recommend-item {
+  display: flex;
+  border-radius: 4px;
+  padding: .2rem;
+  height: 6rem;
+  img {
+    height: 6rem;
+    width: 10rem;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px 4px rgb(232, 232, 232);
+    cursor: pointer;
+  }
+  .item-info {
+    margin-left: .6rem;
+    & > * { cursor: pointer; }
+    .title {
+      font-weight: bold;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+    .poster {
+      color: #969696;
+      font-size: .8rem;
+    }
   }
 }
 </style>

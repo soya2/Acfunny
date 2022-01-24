@@ -45,7 +45,6 @@ export default defineComponent({
 .tabs {
   display: flex;
   justify-content: center;
-  background-color: white;
   padding: .4rem 1rem;
   margin-bottom: 8px;
   .tab {

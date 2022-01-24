@@ -13,11 +13,22 @@ class VideoApi {
     })
   }
 
+  getVideoList (type: 0 | 1, list: number[]): Promise<any> {
+    return Request.axiosInstance({
+      url: 'video/videoList',
+      method: 'get',
+      params: { type, list }
+    })
+  }
+
   addVideoPalyCount (id: number): Promise<any> {
     return Request.axiosInstance({
       url: 'video/addPlayCount',
       method: 'post',
-      params: { id }
+      params: {
+        userId: Number(window.localStorage.getItem('userId')),
+        id
+      }
     })
   }
 

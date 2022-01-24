@@ -37,7 +37,10 @@
       @click="handleClickFollowButton"
     />
   </div>
-  <div class="tags-bar">
+  <div
+    v-if="videoData.tags.length > 0"
+    class="tags-bar"
+  >
     <Tag
       v-for="tag in videoData.tags"
       :key="tag"
@@ -123,6 +126,7 @@ export default defineComponent({
       try {
         const { data } = await VideoApi.getVideoById(id)
         videoData.value = data
+        videoData.value.tags = data.tags.filter((i:string) => i.trim() !== '')
         document.title = videoData.value.title
         buttonBarList.value[0].followNumber = data.like
         buttonBarList.value[1].followNumber = data.favorite
@@ -133,9 +137,7 @@ export default defineComponent({
         await getUserData(videoData.value.posterId)
       } catch {}
     }
-    onMounted(() => {
-      getVideoData(props.videoId)
-    })
+    onMounted(() => getVideoData(props.videoId))
 
     const handleClickIcon = async (id: number, isCheck: boolean) => {
       const index = buttonBarList.value.findIndex(item => item.id === id)
@@ -154,6 +156,7 @@ export default defineComponent({
     }
 
     return {
+      getVideoData,
       videoData,
       posterData,
       buttonBarList,
@@ -190,7 +193,7 @@ export default defineComponent({
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 1rem;
+  margin: 1rem 0;
   .avatar {
     display: flex;
     img {
@@ -218,6 +221,6 @@ export default defineComponent({
   margin: 1rem 0;
 }
 .summary {
-  margin-bottom: 2rem;
+  margin: 1.4rem 0;
 }
 </style>

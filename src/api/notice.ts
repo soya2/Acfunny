@@ -2,7 +2,7 @@ import { Request } from '@/utils/request'
 import { loginRequired } from '@/utils/decorators'
 
 class NoticeApi {
-  @loginRequired()
+  @loginRequired(false)
   getNoticeByUserId (id: number): Promise<any> {
     return Request.axiosInstance({
       url: '/notice',

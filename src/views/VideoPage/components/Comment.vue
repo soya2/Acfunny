@@ -63,9 +63,7 @@ export default defineComponent({
         Message.error(msg)
       }
     }
-    onMounted(() => {
-      getCommentList()
-    })
+    onMounted(() => getCommentList())
 
     const cancelButton = ref(false)
     const handleClickCancel = () => {
@@ -93,6 +91,7 @@ export default defineComponent({
       isComment.value = !isComment.value
     }
     return {
+      getCommentList,
       commentList,
       cancelButton,
       commentContent,
