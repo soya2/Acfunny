@@ -61,11 +61,7 @@ export default defineComponent({
         return false
       }
       const { code, msg } = await UserApi.register({ username, password })
-      switch (code) {
-        case 200: Message.success(msg); break
-        case 401: Message.error(msg); break
-        default: Message.error('注册失败')
-      }
+      if (code === 0) Message.success(msg)
     }
 
     return {
@@ -78,7 +74,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .base-container {
-  margin: auto;
+  margin: 2rem auto;
   width: 36%;
   .form-title {
     font-size: 1.4rem;

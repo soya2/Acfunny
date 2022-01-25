@@ -1,19 +1,25 @@
 import { RouteRecordRaw } from 'vue-router'
-import Register from '@/views/Users/Register.vue'
-import PersonalCenter from '@/views/Users/PersonalCenter.vue'
 
 export const UserRoutes: Array<RouteRecordRaw> = [
   {
     path: '/register',
     name: 'Register',
-    component: Register
+    component: () => import('@/views/Users/Register.vue')
   },
   {
     path: '/personal-center',
     name: 'PersonalCenter',
-    component: PersonalCenter,
+    component: () => import('@/views/Users/PersonalCenter.vue'),
     meta: {
       title: '个人中心'
+    }
+  },
+  {
+    path: '/edit-user-info',
+    name: 'EditUserInfo',
+    component: () => import('@/views/Users/EditInfo.vue'),
+    meta: {
+      title: '个人信息编辑'
     }
   }
 ]

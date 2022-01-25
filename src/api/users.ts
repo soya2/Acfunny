@@ -18,6 +18,14 @@ class UserApi {
     })
   }
 
+  getUserList (list: number[]): Promise<any> {
+    return Request.axiosInstance({
+      url: '/users/list',
+      method: 'get',
+      params: { list }
+    })
+  }
+
   login (info: { username: string, password: string }): Promise<any> {
     return Request.axiosInstance({
       url: '/users/login',

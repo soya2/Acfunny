@@ -10,7 +10,7 @@
         <div class="info">
           <div class="name">{{ userData.name }}</div>
           <div>
-            <span class="intro">关注：{{ userData.subscript }}</span>
+            <span class="intro">关注：{{ userData.subscript.length }}</span>
             <span class="intro">粉丝：{{ userData.fans }}</span>
           </div>
           <div class="intro">{{ userData.introduction }}</div>
@@ -20,6 +20,7 @@
         <button
           v-if="loginId === userId"
           class="btn-primary-plain info-btn"
+          @click="$router.push(`/edit-user-info?id=${loginId}`)"
         >编辑资料</button>
         <Button
           :content="isFollow ? '已关注' : '关注'"
@@ -43,6 +44,18 @@
       v-show="isActiveTab === 2"
       :list="userInfo.postVideo"
     />
+    <favorite
+      v-show="isActiveTab === 3"
+      :list="userInfo.favorite"
+    />
+    <history
+      v-show="isActiveTab === 4"
+      :list="userInfo.history"
+    />
+    <follows
+      v-show="isActiveTab === 5"
+      :list="userData.subscript"
+    />
   </div>
 </template>
 
@@ -54,18 +67,24 @@ import Button from '@/components/Button.vue'
 import Tabs, { TabsOptions } from '@/components/Tabs.vue'
 import UserInfo from './components/UserInfo.vue'
 import PostVideoList from './components/PostVideoList.vue'
+import Favorite from './components/Favorite.vue'
+import History from './components/History.vue'
+import Follows from './components/Follows.vue'
 export default defineComponent({
   name: 'PersonalCenter',
   components: {
     Button,
     Tabs,
     UserInfo,
-    PostVideoList
+    PostVideoList,
+    Favorite,
+    History,
+    Follows
   },
   setup () {
     const route = useRoute()
     const loginId = Number(window.localStorage.getItem('userId'))
-    const userId = Number(route.query.id)
+    const userId = ref(Number(route.query.id))
 
     const userData = ref({
       avatar: '',
@@ -73,7 +92,7 @@ export default defineComponent({
       introduction: '',
       id: '',
       name: '',
-      subscript: 0,
+      subscript: [],
       favorite: []
     })
     const isFollow = ref(false)
@@ -81,12 +100,11 @@ export default defineComponent({
       try {
         const { data } = await UserApi.getUserById(id)
         userData.value = data
-        userData.value.subscript = data.subscript.length
         const { data: followData } = await UserApi.isFollow(id)
         isFollow.value = followData
       } catch {}
     }
-    getUserData(userId)
+    getUserData(userId.value)
 
     const handleClickFollow = async () => {
       try {
@@ -104,7 +122,8 @@ export default defineComponent({
       { id: 1, name: '首页' },
       { id: 2, name: '视频' },
       { id: 3, name: '收藏夹' },
-      { id: 4, name: '历史记录' }
+      { id: 4, name: '历史记录' },
+      { id: 5, name: '关注' }
     ] as TabsOptions[])
     const handleChangeTab = (id: number) => {
       isActiveTab.value = id
@@ -127,11 +146,12 @@ export default defineComponent({
         userInfo.value.favorite = userData.value.favorite
       } catch {}
     }
-    getUserInfo(userId)
+    getUserInfo(userId.value)
 
     const userInfoRef = ref()
     watch(route, (oldVal) => {
       if (route.path !== '/personal-center') return
+      userId.value = Number(route.query.id)
       getUserData(Number(oldVal.query.id))
       getUserInfo(Number(oldVal.query.id))
     })
