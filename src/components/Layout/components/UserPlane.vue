@@ -81,8 +81,8 @@ export default defineComponent({
         Message.error('请正确填写用户名和密码')
         return false
       }
-      const { data, msg } = await UserApi.login({ username, password })
-      if (data !== null) {
+      try {
+        const { data, msg } = await UserApi.login({ username, password })
         Message.success(msg)
         formData.value.username = ''
         formData.value.password = ''
@@ -91,9 +91,7 @@ export default defineComponent({
         store.commit('changeLoginState', true)
         router.push('/')
         handleClick()
-      } else {
-        Message.error(msg)
-      }
+      } catch {}
     }
     const handleLogout = async () => {
       const id = window.localStorage.getItem('userId')

@@ -23,6 +23,10 @@ import VideoApi from '@/api/video'
 export default defineComponent({
   name: 'History',
   props: {
+    isShow: {
+      type: Boolean,
+      default: false
+    },
     list: {
       type: Array as PropType<number[]>,
       default: () => []
@@ -36,7 +40,7 @@ export default defineComponent({
     const hasList = ref(false)
     const getVideoList = async (idList: number[]) => {
       try {
-        if (idList.length === 0) {
+        if (!props.isShow || idList.length === 0) {
           hasList.value = false
           return
         }

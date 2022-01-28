@@ -46,10 +46,12 @@
     />
     <favorite
       v-show="isActiveTab === 3"
+      :isShow="userInfo.showFavorite"
       :list="userInfo.favorite"
     />
     <history
       v-show="isActiveTab === 4"
+      :isShow="userInfo.showHistory"
       :list="userInfo.history"
     />
     <follows
@@ -136,8 +138,8 @@ export default defineComponent({
       recommend: [],
       history: [],
       favorite: [] as number[],
-      showHistory: true,
-      showFavorite: true
+      showHistory: false,
+      showFavorite: false
     })
     const getUserInfo = async (id: number) => {
       try {

@@ -40,6 +40,7 @@
 import { defineComponent, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import UsersApi from '@/api/users'
+import Message from '@/utils/message'
 import Switch from '@/components/Switch.vue'
 export default defineComponent({
   name: 'EditInfo',
@@ -68,8 +69,15 @@ export default defineComponent({
     }
     getUserInfo(userId.value)
 
-    const submit = () => {
-      console.log(1)
+    const submit = async () => {
+      const { msg } = await UsersApi.editUserInfo({
+        userId: userId.value,
+        userName: userData.value.name,
+        introduction: userData.value.introduction,
+        showHistory: userInfo.value.showHistory,
+        showFavorite: userInfo.value.showFavorite
+      })
+      Message.success(msg)
     }
 
     return {

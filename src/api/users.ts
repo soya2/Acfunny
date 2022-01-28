@@ -73,6 +73,21 @@ class UserApi {
       }
     })
   }
+
+  @loginRequired()
+  editUserInfo (infoData: {
+    userId: number,
+    userName: string,
+    introduction: string,
+    showHistory: boolean;
+    showFavorite: boolean
+  }): Promise<any> {
+    return Request.axiosInstance({
+      url: 'users/updateUserInfo',
+      method: 'post',
+      data: infoData
+    })
+  }
 }
 
 export default new UserApi()
