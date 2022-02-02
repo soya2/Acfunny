@@ -28,11 +28,17 @@
       </div>
     </form>
     <div class="personal-container" v-else>
-      <div @click="routePush(`/personal-center?id=${userId}`)">
+      <div
+        class="aside-item"
+        @click="routePush(`/personal-center?id=${userId}`)"
+      >
         <font-awesome-icon icon="user" />
         个人中心
       </div>
-      <div @click="handleLogout">
+      <div
+        class="aside-item"
+        @click="handleLogout"
+      >
         <font-awesome-icon icon="reply" />
         登出
       </div>
@@ -75,6 +81,7 @@ export default defineComponent({
     const status = computed(() => store.state.isLogin)
     const router = useRouter()
 
+    const userId = ref(Number(window.localStorage.getItem('userId')))
     const handleLogin = async () => {
       const { username, password } = formData.value
       if (username.trim() === '' || password.trim() === '') {
@@ -84,11 +91,13 @@ export default defineComponent({
       try {
         const { data, msg } = await UserApi.login({ username, password })
         Message.success(msg)
-        formData.value.username = ''
-        formData.value.password = ''
+        userId.value = data.id
+        window.localStorage.setItem('username', formData.value.username)
         window.localStorage.setItem('userId', data.id)
         window.localStorage.setItem('token', data.token)
         store.commit('changeLoginState', true)
+        formData.value.username = ''
+        formData.value.password = ''
         router.push('/')
         handleClick()
       } catch {}
@@ -98,13 +107,13 @@ export default defineComponent({
       const { code, msg } = await UserApi.logout(Number(id))
       if (code === 0) {
         store.commit('changeLoginState', false)
+        window.localStorage.setItem('username', '')
         window.localStorage.setItem('userId', '')
       } else {
         Message.error(msg)
       }
     }
 
-    const userId = Number(window.localStorage.getItem('userId'))
     const routePush = (url: string) => {
       router.push(url)
       handleClick()
@@ -131,7 +140,7 @@ export default defineComponent({
   overflow: hidden;
 }
 .login-container {
-  margin-bottom: 2rem;
+  margin: .5rem;
   input {
     width: 95%;
   }
@@ -146,13 +155,13 @@ export default defineComponent({
 }
 .personal-container > *{
   border-radius: 6px;
-  margin-bottom: .4rem;
+  margin: .2rem 0;
   padding: .2rem .6rem;
   transition: .2s;
   cursor: pointer;
   &:hover {
     color: red;
-    background-color: rgba(233, 233, 233, 0.6);
+    background-color: #ffdde05d;
   }
 }
 </style>

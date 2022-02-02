@@ -80,26 +80,26 @@ export default defineComponent({
   width: 16%;
   margin: 12px 0;
   padding: 8px 12px;
-  border: 1px solid;
+  border: 1px solid transparent;
   border-radius: 8px;
   font-size: .8rem;
   box-shadow: 0 2px 6px 0 rgb(233, 233, 233);
 }
 .success {
   @extend .message-base-box;
-  background-color: rgb(168, 219, 168);
-  border-color: green;
+  color: green;
+  background-color: rgb(219, 240, 219);
 }
 
 .error {
   @extend .message-base-box;
-  background-color: rgb(255, 196, 196);
-  border-color: rgb(214, 83, 83);
+  color: rgb(238, 54, 54);
+  background-color: rgb(245, 224, 224);
 }
 
 .info {
   @extend .message-base-box;
-  background-color: rgb(184, 184, 184);
-  border-color: gray;
+  color: gray;
+  background-color: rgb(218, 218, 218);
 }
 </style>

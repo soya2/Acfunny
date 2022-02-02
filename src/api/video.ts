@@ -75,6 +75,21 @@ class VideoApi {
       }
     })
   }
+
+  @loginRequired()
+  uploadVideoInfo (title: string, summary: string, tags: string[]): Promise<any> {
+    return Request.axiosInstance({
+      url: 'video/uploadInfo',
+      method: 'post',
+      data: {
+        userId: Number(window.localStorage.getItem('userId')),
+        username: window.localStorage.getItem('username'),
+        title,
+        summary,
+        tags
+      }
+    })
+  }
 }
 
 export default new VideoApi()

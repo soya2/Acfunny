@@ -89,7 +89,7 @@ export default defineComponent({
       switch (id) {
         case 1: historyRef.value.clickIcon(true); break
         case 2: noticeRef.value.clickIcon(true); break
-        case 3: router.push({ path: 'test' }); break
+        case 3: router.push({ path: 'create' }); break
         case 4: userRef.value.clickIcon(true)
       }
     }

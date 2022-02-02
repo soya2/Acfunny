@@ -17,7 +17,7 @@
   // transform: translate(-50% , 10px);
   width: fit-content;
   height: 400px;
-  padding: 8px 16px;
+  padding: 8px;
   border-radius: 8px;
   background-color: #fff;
   box-shadow: 0 8px 24px $shadowColor;
@@ -32,6 +32,19 @@
 
 .vertical-enter-active { animation: slide-vertical .2s; }
 .vertical-leave-active { animation: slide-vertical .2s reverse; }
+
+// aside-item
+.aside-item {
+  border-radius: 6px;
+  margin: .2rem 0;
+  padding: .2rem .6rem;
+  transition: .2s;
+  cursor: pointer;
+  &:hover {
+    color: $mainColor;
+    background-color: $mainWeakColor;
+  }
+}
 
 // button
 .btn-base {
@@ -93,6 +106,7 @@
   cursor: pointer;
   &:hover {
     color: $mainColor;
+    background-color: $mainWeakColor;
   }
 }
 

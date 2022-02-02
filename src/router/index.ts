@@ -3,6 +3,7 @@ import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import { UserRoutes } from './Users'
 import { VideoRoutes } from './VideoPage'
+import { CreateRouter } from './Create'
 import Home from '../views/Home/index.vue'
 
 const routes: Array<RouteRecordRaw> = [
@@ -16,6 +17,7 @@ const routes: Array<RouteRecordRaw> = [
   },
   ...UserRoutes,
   ...VideoRoutes,
+  ...CreateRouter,
   {
     path: '/*',
     name: 'Error',

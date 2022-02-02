@@ -20,6 +20,7 @@ const createInstance = (cfg: MessageConfig) => {
   messageNode.style.justifyContent = 'center'
   messageNode.style.top = `${messageList.length * height}px`
   messageNode.style.position = 'fixed'
+  messageNode.style.pointerEvents = 'none'
 
   const app = createApp(Message, {
     config,

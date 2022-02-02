@@ -1,7 +1,9 @@
 $mainColor: #fd4c5d;
+$mainWeakColor: #ffdde05d;
 $shadowColor: rgb(232, 232, 232);
 
 :export {
   mainColor: $mainColor;
   shadowColor: $shadowColor;
+  mainWeakColor: $mainWeakColor
 }
