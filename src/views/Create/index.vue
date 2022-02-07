@@ -4,6 +4,11 @@
     <div class="base-container create-main">
       <h3>创作中心</h3>
       <form>
+        <label>视频：</label>
+        <Upload
+          ref="uploadRef"
+          @handleClickUpload="uploadFile"
+        />
         <label for="title">视频标题：</label>
         <input
           id="title"
@@ -43,12 +48,15 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import Aside from './components/Aside.vue'
+import Upload from '@/components/Upload.vue'
 import Message from '@/utils/message'
 import VideoApi from '@/api/video'
+import { bufferSlice } from '@/utils/index'
 export default defineComponent({
   name: 'Create',
   components: {
-    Aside
+    Aside,
+    Upload
   },
   setup () {
     const videoData = ref({
@@ -57,7 +65,32 @@ export default defineComponent({
       tags: ''
     })
 
+    const uploadRef = ref()
+    const uploadFile = async (buffer: ArrayBuffer) => {
+      const bufferList = bufferSlice(buffer)
+      const requestList: CallableFunction[] = []
+      bufferList.forEach(item => {
+        const fn = async () => {
+          const formData = new FormData()
+          formData.append('chunk', item.chunk)
+          formData.append('filename', item.fileName)
+          return await VideoApi.uploadVideoStream(formData)
+        }
+        requestList.push(fn)
+      })
+      try {
+        for await (const req of requestList) {
+          const { data, msg } = await req()
+          if (data && data.fileHash) {
+            console.log(data.fileHash)
+            Message.success(msg)
+          }
+        }
+      } catch {}
+    }
     const submit = async () => {
+      const { file } = uploadRef.value
+      if (!file) return Message.error('请选择文件')
       if (videoData.value.title.trim() === '') {
         return Message.error('视频标题不能为空')
       }
@@ -74,6 +107,8 @@ export default defineComponent({
 
     return {
       videoData,
+      uploadRef,
+      uploadFile,
       submit
     }
   }
@@ -90,7 +125,7 @@ export default defineComponent({
   width: 40%;
   margin-left: 1rem;
   input, textarea {
-    margin: 10px 0;
+    margin: .6rem 0;
   }
   textarea {
     height: 5rem;

@@ -90,6 +90,16 @@ class VideoApi {
       }
     })
   }
+
+  @loginRequired()
+  uploadVideoStream (from: FormData) {
+    return Request.axiosInstance({
+      url: 'video/videoBuffer',
+      method: 'post',
+      headers: { 'Content-Type': 'multipart/form-data' },
+      data: from
+    })
+  }
 }
 
 export default new VideoApi()

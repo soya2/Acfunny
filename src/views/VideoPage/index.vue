@@ -1,7 +1,7 @@
 <template>
   <div class="col-main">
     <div class="left">
-      <Video />
+      <Video :videoId="videoId" />
       <Information ref="infoRef" :videoId="videoId" />
       <Comment ref="commentRef" :videoId="videoId" />
     </div>

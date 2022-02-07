@@ -1,20 +1,19 @@
 <template>
-  <!-- https://klxxcdn.oss-cn-hangzhou.aliyuncs.com/histudy/hrm/media/bg3.mp4 -->
   <video
-    :src="videoSrc"
+    :src="`/api/video/videoStream?videoId=${videoId}`"
     controls
     class="video-container"
   />
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'Video',
   props: {
-    videoSrc: {
-      type: String,
-      default: ''
+    videoId: {
+      type: Number,
+      default: -1
     }
   },
   setup () {

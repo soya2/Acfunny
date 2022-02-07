@@ -84,7 +84,9 @@ export default defineComponent({
           )
           Message.success(msg)
           await getCommentList()
-        } catch {}
+        } catch (e) {
+          return
+        }
       } else {
         cancelButton.value = true
       }
