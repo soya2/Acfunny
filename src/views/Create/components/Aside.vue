@@ -14,20 +14,26 @@
 import { defineComponent, ref } from 'vue'
 export default defineComponent({
   name: 'Aside',
-  setup () {
+  props: {
+    items: {
+      type: Array,
+      default: () => []
+    }
+  },
+  emits: ['handleClickItem'],
+  setup (props, context) {
     const activeIndex = ref(0)
-    const items = ref([
-      { id: 0, content: '创作中心' },
-      { id: 1, content: '投稿管理' }
-    ])
     const handleClickItem = (index: number) => {
+      context.emit('handleClickItem', index)
+    }
+    const changeIndex = (index: number) => {
       activeIndex.value = index
     }
 
     return {
-      items,
       activeIndex,
-      handleClickItem
+      handleClickItem,
+      changeIndex
     }
   }
 })

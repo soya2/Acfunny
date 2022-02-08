@@ -54,6 +54,11 @@
   outline: solid 3px transparent;
   &:active { outline-color: $shadowColor; }
 }
+.btn-sm {
+  @extend .btn-base;
+  padding: 2px 8px;
+  font-size: .6rem;
+}
 .btn-loading {
   @extend .btn-base;
   cursor: not-allowed;
@@ -151,4 +156,13 @@
     outline: .2rem solid transparent;
     transition: .2s;
   }
+}
+
+.confirm-component {
+  position: absolute;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba($color: #e7e7e7, $alpha: .4);
+  backdrop-filter: blur(3px);
 }

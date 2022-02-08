@@ -11,7 +11,7 @@ export function dateParse (time: string): string {
 }
 
 export function bufferSlice (buffer: ArrayBuffer): Array<{ chunk: Blob, fileName: string }> {
-  const chunkSize = 1024 * 1024 * 2
+  const chunkSize = 1024 * 1024 * 5
   const chunkList = []
   const chunkListLength = Math.ceil(buffer.byteLength / chunkSize)
   const hash = crypto.createHash('md5').update(new Date().toString()).digest('hex')

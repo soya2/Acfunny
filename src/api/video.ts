@@ -77,7 +77,12 @@ class VideoApi {
   }
 
   @loginRequired()
-  uploadVideoInfo (title: string, summary: string, tags: string[]): Promise<any> {
+  uploadVideoInfo (
+    title: string,
+    summary: string,
+    tags: string[],
+    fileName: string
+  ): Promise<any> {
     return Request.axiosInstance({
       url: 'video/uploadInfo',
       method: 'post',
@@ -86,7 +91,8 @@ class VideoApi {
         username: window.localStorage.getItem('username'),
         title,
         summary,
-        tags
+        tags,
+        fileName
       }
     })
   }
@@ -98,6 +104,15 @@ class VideoApi {
       method: 'post',
       headers: { 'Content-Type': 'multipart/form-data' },
       data: from
+    })
+  }
+
+  @loginRequired()
+  deleteVideoFile (hash: string): Promise<any> {
+    return Request.axiosInstance({
+      url: 'video/removeVideoFile',
+      method: 'get',
+      params: { name: hash }
     })
   }
 }

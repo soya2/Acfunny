@@ -2,7 +2,10 @@
   <div style="margin: .6rem 0;">
     <transition name="vertical">
       <div v-show="file !== undefined" class="choose">
-        <div class="name">{{ fileName }}</div>
+        <div class="name">
+          {{ fileName }}
+          <span v-show="isHidden" class="tips">（已上传）</span>
+        </div>
         <icon-button
           :button-object="{ id: 0, icon: 'times', tip: '删除' }"
           @handleClickIcon="handleDeleteChoose"
@@ -17,12 +20,13 @@
       @change="handleInputChange"
     />
     <button
+      v-show="!isHidden"
       class="btn-primary"
       type="button"
       @click="clickButton"
     >选择文件</button>
     <button
-      v-show="uploadButtonVisible"
+      v-show="(!isHidden) && uploadButtonVisible"
       class="btn-primary"
       style="margin-left: .4rem"
       type="button"
@@ -39,11 +43,12 @@ export default defineComponent({
   components: {
     IconButton
   },
-  emits: ['handleClickUpload'],
+  emits: ['handleClickUpload', 'handleClickDelete'],
   setup (props, context) {
     const file = ref()
     const fileName = ref('')
     const uploadRef = ref()
+    const isHidden = ref(false)
     const uploadButtonVisible = ref(false)
     const clickButton = () => {
       uploadRef.value.click()
@@ -64,10 +69,16 @@ export default defineComponent({
       fileName.value = ''
       uploadRef.value.value = ''
       uploadButtonVisible.value = false
+      isHidden.value = false
+      context.emit('handleClickDelete')
     }
 
     const handleClickUpload = () => {
       context.emit('handleClickUpload', file.value)
+    }
+
+    const changeButtonIsHidden = (state: boolean) => {
+      isHidden.value = state
     }
 
     return {
@@ -75,10 +86,12 @@ export default defineComponent({
       uploadRef,
       fileName,
       clickButton,
+      isHidden,
       uploadButtonVisible,
       handleInputChange,
       handleDeleteChoose,
-      handleClickUpload
+      handleClickUpload,
+      changeButtonIsHidden
     }
   }
 })
@@ -99,6 +112,10 @@ export default defineComponent({
     font-weight: bold;
     font-size: .6rem;
     cursor: pointer;
+    .tips {
+      font-weight: normal;
+      color: gray;
+    }
   }
 }
 .upload {
