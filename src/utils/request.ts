@@ -66,3 +66,8 @@ export class Request {
     }
   }
 }
+
+export type ResType = Promise<any>
+export abstract class Api {
+  abstract getBase (): string
+}

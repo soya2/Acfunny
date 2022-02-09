@@ -10,6 +10,11 @@
   }
 }
 
+.main-hover {
+  transition: .2s;
+  &:hover { background-color: $mainWeakColor; }
+}
+
 .rounded-container {
   position: absolute;
   top: 64px;
@@ -165,4 +170,25 @@
   height: 100vh;
   background-color: rgba($color: #e7e7e7, $alpha: .4);
   backdrop-filter: blur(3px);
+}
+
+// loading
+.loader,
+.loader:after {
+  border-radius: 50%;
+  width: 4em;
+  height: 4em;
+}
+.loader {
+  $borderWidth: .4rem;
+  margin: 60px auto;
+  font-size: 10px;
+  position: relative;
+  text-indent: -9999em;
+  border-top: $borderWidth solid $mainColor;
+  border-right: $borderWidth solid $mainColor;
+  border-bottom: $borderWidth solid $mainColor;
+  border-left: $borderWidth solid $mainWeakColor;
+  transform: translateZ(0);
+  animation: load8 1.1s infinite linear;
 }

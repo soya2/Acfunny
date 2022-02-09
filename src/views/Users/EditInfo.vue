@@ -2,6 +2,19 @@
   <div class="base-container">
     <p class="form-title">账号信息</p>
     <form>
+      <label for="avatar">头像：</label>
+      <div v-show="avatarUrl !== ''">
+        <img
+          class="avatar"
+          :src="avatarUrl"
+        />
+      </div>
+      <Upload
+        accept=".jpg"
+        :hasUpload="false"
+        @handleChooseFile="handleChoose"
+        @handleClickDelete="avatarUrl = ''"
+      />
       <label for="username">用户名：</label>
       <input
         id="username"
@@ -39,12 +52,14 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import UsersApi from '@/api/users'
+import { UserApi } from '@/api'
 import Message from '@/utils/message'
+import Upload from '@/components/Upload.vue'
 import Switch from '@/components/Switch.vue'
 export default defineComponent({
   name: 'EditInfo',
   components: {
+    Upload,
     Switch
   },
   setup () {
@@ -61,16 +76,21 @@ export default defineComponent({
     })
     const getUserInfo = async (id: number) => {
       try {
-        const { data } = await UsersApi.getUserById(id)
+        const { data } = await UserApi.getUserById(id)
         userData.value = data
-        const { data: info } = await UsersApi.getUserInfoById(id)
+        const { data: info } = await UserApi.getUserInfoById(id)
         userInfo.value = info
       } catch {}
     }
     getUserInfo(userId.value)
 
+    const avatarUrl = ref('')
+    const handleChoose = (buffer: ArrayBuffer) => {
+      avatarUrl.value = URL.createObjectURL(new Blob([buffer]))
+    }
+
     const submit = async () => {
-      const { msg } = await UsersApi.editUserInfo({
+      const { msg } = await UserApi.editUserInfo({
         userId: userId.value,
         userName: userData.value.name,
         introduction: userData.value.introduction,
@@ -83,6 +103,8 @@ export default defineComponent({
     return {
       userData,
       userInfo,
+      avatarUrl,
+      handleChoose,
       submit
     }
   }
@@ -96,6 +118,11 @@ export default defineComponent({
   .form-title {
     font-size: 1.4rem;
     font-weight: bold;
+  }
+  .avatar {
+    width: 8rem;
+    height: 8rem;
+    border-radius: 50%;
   }
   input {
     margin: 10px 0;

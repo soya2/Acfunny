@@ -1,103 +1,87 @@
-import { Request } from '@/utils/request'
-import { loginRequired } from '@/utils/decorators'
+import { Request, Api, ResType } from '@/utils/request'
+import { loginRequired, Get, Post, Loading } from '@/utils/decorators'
 
-class VideoApi {
-  getVideoById (
+class VideoApi extends Api {
+  getBase () { return 'video' }
+
+  @Get('')
+  async getVideoById (
     id: number,
-    userId = window.localStorage.getItem('userId')
-  ): Promise<any> {
-    return Request.axiosInstance({
-      url: 'video',
-      method: 'get',
-      params: { id, userId }
-    })
+    userId = Number(window.localStorage.getItem('userId'))
+  ): ResType {
+    return { id, userId }
   }
 
-  getVideoList (type: 0 | 1, list: number[]): Promise<any> {
-    return Request.axiosInstance({
-      url: 'video/videoList',
-      method: 'get',
-      params: { type, list }
-    })
+  @Get('videoList')
+  async getVideoList (type: 0 | 1, list: number[]): ResType {
+    return { type, list }
   }
 
-  addVideoPalyCount (id: number): Promise<any> {
-    return Request.axiosInstance({
-      url: 'video/addPlayCount',
-      method: 'post',
-      params: {
-        userId: Number(window.localStorage.getItem('userId')),
-        id
-      }
-    })
+  @Post('addPlayCount')
+  async addVideoPalyCount (id: number): ResType {
+    return {
+      userId: Number(window.localStorage.getItem('userId')),
+      id
+    }
   }
 
-  getCommentList (id: number): Promise<any> {
-    return Request.axiosInstance({
-      url: 'video/commentList',
-      method: 'get',
-      params: { id }
-    })
+  @Get('commentList')
+  async getCommentList (id: number): ResType {
+    return { id }
   }
 
   @loginRequired()
-  addComment (videoId: number, content: string): Promise<any> {
-    const posterId = Number(window.localStorage.getItem('userId'))
-    return Request.axiosInstance({
-      url: 'video/addComment',
-      method: 'post',
-      data: { videoId, posterId, content }
-    })
+  @Loading()
+  @Post('addComment')
+  async addComment (videoId: number, content: string): ResType {
+    return {
+      videoId,
+      posterId: Number(window.localStorage.getItem('userId')),
+      content
+    }
   }
 
   @loginRequired()
-  likeVideo (videoId: number, type: boolean): Promise<any> {
-    return Request.axiosInstance({
-      url: 'video/like',
-      method: 'post',
-      data: {
-        userId: Number(window.localStorage.getItem('userId')),
-        videoId,
-        type
-      }
-    })
+  @Post('like')
+  async likeVideo (videoId: number, type: boolean): ResType {
+    return {
+      userId: Number(window.localStorage.getItem('userId')),
+      videoId,
+      type
+    }
   }
 
   @loginRequired()
-  favoriteVideo (videoId: number, type: boolean): Promise<any> {
-    return Request.axiosInstance({
-      url: 'video/favorite',
-      method: 'post',
-      data: {
-        userId: Number(window.localStorage.getItem('userId')),
-        videoId,
-        type
-      }
-    })
+  @Post('favorite')
+  async favoriteVideo (videoId: number, type: boolean): ResType {
+    return {
+      userId: Number(window.localStorage.getItem('userId')),
+      videoId,
+      type
+    }
   }
 
   @loginRequired()
-  uploadVideoInfo (
+  @Loading()
+  @Post('uploadInfo')
+  async uploadVideoInfo (
     title: string,
     summary: string,
     tags: string[],
     fileName: string
-  ): Promise<any> {
-    return Request.axiosInstance({
-      url: 'video/uploadInfo',
-      method: 'post',
-      data: {
-        userId: Number(window.localStorage.getItem('userId')),
-        username: window.localStorage.getItem('username'),
-        title,
-        summary,
-        tags,
-        fileName
-      }
-    })
+  ): ResType {
+    return {
+      userId: Number(window.localStorage.getItem('userId')),
+      username: window.localStorage.getItem('username'),
+      title,
+      summary,
+      tags,
+      fileName
+    }
   }
 
   @loginRequired()
+  @Loading()
   uploadVideoStream (from: FormData) {
     return Request.axiosInstance({
       url: 'video/videoBuffer',
@@ -108,12 +92,9 @@ class VideoApi {
   }
 
   @loginRequired()
-  deleteVideoFile (hash: string): Promise<any> {
-    return Request.axiosInstance({
-      url: 'video/removeVideoFile',
-      method: 'get',
-      params: { name: hash }
-    })
+  @Get('removeVideoFile')
+  async deleteVideoFile (hash: string): ResType {
+    return { name: hash }
   }
 }
 

@@ -10,12 +10,19 @@
         <div
           v-for="item of historyList"
           :key=item.id
-          class="history-item slide-border"
+          class="history-item main-hover"
         >
-          <img class="item-img" :src="item.img">
+          <img
+            class="item-img"
+            :src="item.cover"
+            @click="$router.push(`/video?id=${item.id}`)"
+          >
           <div class="item-detail">
-            <div class="item-title">{{ item.title }}</div>
-            <div class="item-date">{{ item.date }}</div>
+            <div
+              class="item-title"
+              @click="$router.push(`/video?id=${item.id}`)"
+            >{{ item.title }}</div>
+            <div class="item-date">{{ dateParse(item.uploadTime) }}</div>
           </div>
         </div>
       </div>
@@ -34,13 +41,8 @@
 <script lang="ts">
 import { defineComponent, ref, onMounted, onUnmounted, computed } from 'vue'
 import { useStore } from 'vuex'
-
-export type HistoryItem = {
-  id: number;
-  title: string;
-  img: string;
-  date: string
-}
+import { UserApi, VideoApi } from '@/api'
+import { dateParse } from '@/utils/index'
 
 export default defineComponent({
   name: 'History',
@@ -60,7 +62,16 @@ export default defineComponent({
       window.removeEventListener('click', handleClick)
     })
 
-    const historyList = ref([] as Array<HistoryItem>)
+    const historyList = ref([])
+    const getHistoryList = async () => {
+      const userId = Number(window.localStorage.getItem('userId'))
+      if (Number.isNaN(userId)) return
+      const { data } = await UserApi.getUserInfoById(userId)
+      const historyIdList = data.history
+      const { data: videoData } = await VideoApi.getVideoList(0, historyIdList)
+      historyList.value = videoData
+    }
+    getHistoryList()
 
     const store = useStore()
     const loginStatus = computed(() => store.state.isLogin)
@@ -69,7 +80,8 @@ export default defineComponent({
       isVisible,
       historyList,
       loginStatus,
-      clickIcon
+      clickIcon,
+      dateParse
     }
   }
 })
@@ -78,24 +90,23 @@ export default defineComponent({
 <style lang="scss" scoped>
 .rounded-container {
   width: 18vw;
-  overflow: hidden;
+  overflow-Y: visible;
 }
 .title {
   margin-left: 8px;
+  padding: .2rem 0;
   font-size: 18px;
 }
 .history-item {
   display: flex;
   padding: 8px 0;
   border-radius: 16px;
-  cursor: pointer;
-  &:hover {
-    background-color: rgb(247, 247, 247);
-  }
   .item-img {
-    width: 30%;
+    height: 4rem;
+    width: 6rem;
     border-radius: 8px;
     margin-left: 8px;
+    cursor: pointer;
   }
   .item-detail {
     margin-left: 8px;
@@ -104,11 +115,13 @@ export default defineComponent({
     justify-content: space-between;
   }
   .item-title {
-    font-size: 18px;
+    font-size: .6rem;
     font-weight: bold;
+    line-height: 1rem;
+    cursor: pointer;
   }
   .item-date {
-    font-size: 12px;
+    font-size: .2rem;
     color: #333;
   }
 }

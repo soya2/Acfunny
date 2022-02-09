@@ -15,7 +15,7 @@
     <input
       ref="uploadRef"
       type="file"
-      accept=".mp4"
+      :accept="accept"
       style="display:none"
       @change="handleInputChange"
     />
@@ -26,7 +26,7 @@
       @click="clickButton"
     >选择文件</button>
     <button
-      v-show="(!isHidden) && uploadButtonVisible"
+      v-show="hasUpload && (!isHidden) && uploadButtonVisible"
       class="btn-primary"
       style="margin-left: .4rem"
       type="button"
@@ -43,7 +43,17 @@ export default defineComponent({
   components: {
     IconButton
   },
-  emits: ['handleClickUpload', 'handleClickDelete'],
+  props: {
+    accept: {
+      type: String,
+      default: '.mp4'
+    },
+    hasUpload: {
+      type: Boolean,
+      default: true
+    }
+  },
+  emits: ['handleChooseFile', 'handleClickUpload', 'handleClickDelete'],
   setup (props, context) {
     const file = ref()
     const fileName = ref('')
@@ -61,6 +71,7 @@ export default defineComponent({
         fileName.value = chooseFile.name
         uploadButtonVisible.value = true
         file.value = await chooseFile?.arrayBuffer()
+        context.emit('handleChooseFile', file.value)
       }
     }
 

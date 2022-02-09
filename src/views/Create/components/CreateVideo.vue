@@ -85,6 +85,7 @@ export default defineComponent({
     }
 
     const deleteFile = async () => {
+      if (fileHash.value === '') return
       try {
         await VideoApi.deleteVideoFile(fileHash.value)
         fileHash.value = ''
@@ -127,7 +128,6 @@ export default defineComponent({
 
     onBeforeRouteLeave(async (to) => {
       try {
-        console.log(to.fullPath, '/create')
         if (to.fullPath !== '/create') await cancel()
       } catch {
         return false
