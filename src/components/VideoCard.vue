@@ -5,7 +5,7 @@
       class="card-container slide-border"
     >
       <img
-        :src="videoData.cover"
+        :src="cover"
         alt="no-image"
         @click="handleClick(videoData.id)"
       /><br />
@@ -21,7 +21,7 @@
       class="recommend-item slide-border"
     >
       <img
-        :src="videoData.cover"
+        :src="cover"
         @click="handleClick(videoData.id)"
       />
       <div class="item-info">
@@ -36,8 +36,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue'
+import { defineComponent, ref, PropType } from 'vue'
 import { useRouter } from 'vue-router'
+import { ImagesApi } from '@/api'
 
 export interface VideoData {
   id: number;
@@ -59,7 +60,13 @@ export default defineComponent({
       required: true
     }
   },
-  setup () {
+  setup (props) {
+    const cover = ref('')
+    const getCover = async (name: string) => {
+      if (name.trim() === '') return
+      cover.value = await ImagesApi.getImage(name)
+    }
+    getCover(props.videoData.cover)
     const router = useRouter()
     const handleClick = (id: number) => {
       router.push({
@@ -68,6 +75,7 @@ export default defineComponent({
       })
     }
     return {
+      cover,
       handleClick
     }
   }

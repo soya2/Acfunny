@@ -28,7 +28,7 @@ export default defineComponent({
           id: 1,
           title: 'this is a video title',
           posterName: 'admin',
-          cover: 'https://scpic.chinaz.net/files/pic/pic9/201901/zzpic16289.jpg',
+          cover: '51236126',
           isLive: true
         }
       ]

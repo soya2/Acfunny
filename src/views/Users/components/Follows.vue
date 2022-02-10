@@ -5,10 +5,12 @@
       v-for="item in usersList"
       :key="item.id"
     >
-      <img
-        :src="item.avatar"
+      <Avatar
+        style="cursor: pointer;"
+        size="large"
+        :name="item.avatar"
         @click="$router.push(`/personal-center?id=${item.id}`)"
-      >
+      />
       <div
         class="name"
         @click="$router.push(`/personal-center?id=${item.id}`)"
@@ -20,9 +22,14 @@
 
 <script lang="ts">
 import { defineComponent, ref, PropType, watch } from 'vue'
-import UsersApi from '@/api/users'
+import Avatar from '@/components/Avatar.vue'
+import { UserApi } from '@/api'
+
 export default defineComponent({
   name: 'Follows',
+  components: {
+    Avatar
+  },
   props: {
     list: {
       type: Array as PropType<number[]>,
@@ -38,7 +45,7 @@ export default defineComponent({
           hasList.value = false
           return
         }
-        const { data } = await UsersApi.getUserList(idList)
+        const { data } = await UserApi.getUserList(idList)
         usersList.value = data
         hasList.value = data.length > 0
       } catch {}
@@ -64,12 +71,6 @@ export default defineComponent({
     margin: 1rem;
     border-radius: 4px;
     padding: .4rem;
-    img {
-      width: 8rem;
-      height: 8rem;
-      border-radius: 50%;
-      cursor: pointer;
-    }
     .name {
       font-weight: bold;
       text-align: center;

@@ -60,6 +60,7 @@ class UserApi extends Api {
   async editUserInfo (infoData: {
     userId: number,
     userName: string,
+    userAvatar: string,
     introduction: string,
     showHistory: boolean;
     showFavorite: boolean

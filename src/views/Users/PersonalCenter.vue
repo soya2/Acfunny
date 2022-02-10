@@ -1,12 +1,9 @@
 <template>
-  <img
-    class="banner"
-    :src="userInfo.banner"
-  />
+  <img class="banner" :src="userInfo.banner" />
   <div class="content-container">
     <div class="user-data-bar">
       <div style="display: flex;">
-        <img class="avatar" :src="userData.avatar" />
+        <Avatar size="large" :name="userData.avatar" />
         <div class="info">
           <div class="name">{{ userData.name }}</div>
           <div>
@@ -64,7 +61,8 @@
 <script lang="ts">
 import { defineComponent, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import UserApi from '@/api/users'
+import { ImagesApi, UserApi } from '@/api'
+import Avatar from '@/components/Avatar.vue'
 import Button from '@/components/Button.vue'
 import Tabs, { TabsOptions } from '@/components/Tabs.vue'
 import UserInfo from './components/UserInfo.vue'
@@ -75,6 +73,7 @@ import Follows from './components/Follows.vue'
 export default defineComponent({
   name: 'PersonalCenter',
   components: {
+    Avatar,
     Button,
     Tabs,
     UserInfo,
@@ -146,6 +145,7 @@ export default defineComponent({
         const { data } = await UserApi.getUserInfoById(id)
         userInfo.value = data
         userInfo.value.favorite = userData.value.favorite
+        userInfo.value.banner = await ImagesApi.getImage(data.banner)
       } catch {}
     }
     getUserInfo(userId.value)
@@ -191,11 +191,6 @@ export default defineComponent({
   display: flex;
   justify-content: space-between;
   margin: .8rem 0;
-  .avatar {
-    width: 8rem;
-    height: 8rem;
-    border-radius: 50%;
-  }
   .info {
     display: flex;
     flex-direction: column;

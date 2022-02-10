@@ -35,11 +35,12 @@
         />
       </div>
       <div class="nav-item" @click="clickIcon(4)">
-        <img
+        <Avatar
           v-if="loginStatus"
-          class="avatar-container"
-          :src="userAvatar"
-        >
+          style="cursor: pointer;"
+          size="small"
+          :name="userAvatar"
+        />
         <icon-button
           v-else
           :button-object="navItemList[3]"
@@ -57,16 +58,18 @@ import { defineComponent, ref, computed } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import IconButton, { IconButtonType } from '@/components/IconButton/IconButton.vue'
+import Avatar from '@/components/Avatar.vue'
 import SearchBar from '@/components/SearchBar.vue'
 import History from './components/History.vue'
 import Notice from './components/Notice.vue'
 import UserPlane from './components/UserPlane.vue'
-import UserApi from '@/api/users'
+import { UserApi } from '@/api'
 
 export default defineComponent({
   name: 'NavBar',
   components: {
     IconButton,
+    Avatar,
     SearchBar,
     History,
     Notice,
@@ -152,13 +155,6 @@ nav {
       height: $navItemHeight;
       width: $navItemHeight;
       line-height: $navItemHeight;
-    }
-    .avatar-container {
-      width: $navItemHeight;
-      height: $navItemHeight;
-      border-radius: 50%;
-      background-color: gray;
-      cursor: pointer;
     }
   }
   .search-bar {

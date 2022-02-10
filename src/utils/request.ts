@@ -37,7 +37,7 @@ export class Request {
           Store.commit('changeLoginState', false)
           Message.error(msg)
         }
-        if (code === 0) {
+        if (code === 0 || code === 405) {
           return response.data
         } else {
           Request.errorHandle(response)

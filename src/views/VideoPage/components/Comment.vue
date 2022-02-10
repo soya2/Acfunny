@@ -27,7 +27,7 @@
     :key="item.id"
   >
     <div class="item">
-      <img :src="item.posterAvatar" >
+      <Avatar :name="item.posterAvatar" />
       <div class="right">
         <div>
           <span class="name">{{ item.posterName }}</span>
@@ -43,10 +43,14 @@
 import { defineComponent, ref, onMounted } from 'vue'
 import { dateParse } from '@/utils/index'
 import Message from '@/utils/message'
-import VideoApi from '@/api/video'
+import Avatar from '@/components/Avatar.vue'
+import { VideoApi } from '@/api'
 
 export default defineComponent({
   name: 'Comment',
+  components: {
+    Avatar
+  },
   props: {
     videoId: {
       type: Number,
@@ -56,12 +60,8 @@ export default defineComponent({
   setup (props) {
     const commentList = ref([])
     const getCommentList = async (id: number = props.videoId) => {
-      const { code, data, msg } = await VideoApi.getCommentList(id)
-      if (code === 0 && data) {
-        commentList.value = data
-      } else {
-        Message.error(msg)
-      }
+      const { data } = await VideoApi.getCommentList(id)
+      commentList.value = data
     }
     onMounted(() => getCommentList())
 
@@ -84,9 +84,7 @@ export default defineComponent({
           )
           Message.success(msg)
           await getCommentList()
-        } catch (e) {
-          return
-        }
+        } catch {}
       } else {
         cancelButton.value = true
       }
@@ -129,11 +127,6 @@ export default defineComponent({
 .item {
   display: flex;
   margin-bottom: 2rem;
-  img {
-    width: 4rem;
-    height: 4rem;
-    border-radius: 50%;
-  }
   .right {
     margin-left: 1rem;
     .name { font-weight: bold; }

@@ -22,7 +22,7 @@
   <div class="line" />
   <div class="poster-bar">
     <div class="avatar">
-      <img :src="posterData.avatar" >
+      <Avatar :name="posterData.avatar" />
       <div class="poster-info">
         <div>{{ posterData.name }}</div>
         <div class="introduction">{{ posterData.introduction }}</div>
@@ -54,15 +54,17 @@
 import { defineComponent, ref, computed, onMounted } from 'vue'
 import { dateParse } from '@/utils/index'
 import IconButton, { IconButtonType } from '@/components/IconButton/IconButton.vue'
+import Avatar from '@/components/Avatar.vue'
 import Button from '@/components/Button.vue'
 import Tag from '@/components/Tag.vue'
 import UserApi from '@/api/users'
-import VideoApi from '@/api/video'
+import { VideoApi } from '@/api'
 
 export default defineComponent({
   name: 'Information',
   components: {
     IconButton,
+    Avatar,
     Button,
     Tag
   },
@@ -121,6 +123,7 @@ export default defineComponent({
     const getUserData = async (id: number) => {
       const { data } = await UserApi.getUserById(id)
       posterData.value = data
+      // posterData.value.avatar = await ImagesApi.getImage(data.avatar)
     }
     const getVideoData = async (id: number) => {
       try {
@@ -196,11 +199,6 @@ export default defineComponent({
   margin: 1rem 0;
   .avatar {
     display: flex;
-    img {
-      width: 4rem;
-      height: 4rem;
-      border-radius: 50%;
-    }
     .poster-info {
       display: flex;
       flex-direction: column;

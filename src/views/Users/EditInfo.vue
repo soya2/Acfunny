@@ -3,11 +3,13 @@
     <p class="form-title">账号信息</p>
     <form>
       <label for="avatar">头像：</label>
-      <div v-show="avatarUrl !== ''">
+      <div>
         <img
+          v-if="avatarUrl !== ''"
           class="avatar"
           :src="avatarUrl"
         />
+        <Avatar v-else :name="userData.avatar" />
       </div>
       <Upload
         accept=".jpg"
@@ -52,13 +54,15 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { UserApi } from '@/api'
+import { UserApi, ImagesApi } from '@/api'
 import Message from '@/utils/message'
+import Avatar from '@/components/Avatar.vue'
 import Upload from '@/components/Upload.vue'
 import Switch from '@/components/Switch.vue'
 export default defineComponent({
   name: 'EditInfo',
   components: {
+    Avatar,
     Upload,
     Switch
   },
@@ -67,6 +71,7 @@ export default defineComponent({
     const userId = ref(Number(route.query.id))
 
     const userData = ref({
+      avatar: '',
       name: '',
       introduction: ''
     })
@@ -85,19 +90,30 @@ export default defineComponent({
     getUserInfo(userId.value)
 
     const avatarUrl = ref('')
+    const avatarBuffer = ref()
     const handleChoose = (buffer: ArrayBuffer) => {
+      avatarBuffer.value = buffer
       avatarUrl.value = URL.createObjectURL(new Blob([buffer]))
     }
 
     const submit = async () => {
-      const { msg } = await UserApi.editUserInfo({
-        userId: userId.value,
-        userName: userData.value.name,
-        introduction: userData.value.introduction,
-        showHistory: userInfo.value.showHistory,
-        showFavorite: userInfo.value.showFavorite
-      })
-      Message.success(msg)
+      try {
+        const tempHash = userData.value.avatar
+        if (avatarUrl.value.trim() !== '') {
+          const { data } = await ImagesApi.postImage(avatarBuffer.value)
+          userData.value.avatar = data.fileHash
+        }
+        const { msg } = await UserApi.editUserInfo({
+          userId: userId.value,
+          userName: userData.value.name,
+          userAvatar: userData.value.avatar,
+          introduction: userData.value.introduction,
+          showHistory: userInfo.value.showHistory,
+          showFavorite: userInfo.value.showFavorite
+        })
+        if (tempHash.trim() !== '') await ImagesApi.deleteImage(tempHash)
+        Message.success(msg)
+      } catch {}
     }
 
     return {

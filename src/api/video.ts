@@ -17,7 +17,7 @@ class VideoApi extends Api {
     return { type, list }
   }
 
-  @Post('addPlayCount')
+  @Get('addPlayCount')
   async addVideoPalyCount (id: number): ResType {
     return {
       userId: Number(window.localStorage.getItem('userId')),
