@@ -1,5 +1,5 @@
 import { createApp, App } from 'vue'
-import Loading from '@/components/Loading.vue'
+import Loading from './Loading.vue'
 
 let INSTANCE: App
 let NODE: HTMLDivElement

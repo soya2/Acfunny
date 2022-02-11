@@ -1,6 +1,5 @@
 import Store from '@/store/index'
-import Message from './message'
-import LoadingUtils from './Loading'
+import { Loader, Message } from '@/components/common'
 import { Request, Api } from '@/utils/request'
 
 type Args = any[]
@@ -32,9 +31,9 @@ export const Loading = (msg = '请稍后', duration = 5000) => {
   ): PropertyDescriptor {
     const method = descriptor.value
     descriptor.value = async function (...args: Args) {
-      LoadingUtils.start(duration, msg)
+      Loader.start(duration, msg)
       const result = await method.apply(this, args)
-      LoadingUtils.stop()
+      Loader.stop()
       return result
     }
     return descriptor

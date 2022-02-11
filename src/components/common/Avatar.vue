@@ -7,7 +7,7 @@
       'small': size === 'small',
       'large': size === 'large'
     }"
-    src="../assets/defaultAvatar.jpg"
+    src="../../assets/defaultAvatar.jpg"
   >
   <img
     v-else

@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 import Store from '@/store/index'
-import Message from '@/utils/message'
+import { Message } from '@/components/common'
 
 export class Request {
   public static axiosInstance: AxiosInstance;

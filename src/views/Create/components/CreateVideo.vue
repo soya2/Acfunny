@@ -41,11 +41,9 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import { onBeforeRouteLeave } from 'vue-router'
-import Message from '@/utils/message'
-import Confirm from '@/utils/Confirm'
 import { bufferSlice } from '@/utils/index'
-import VideoApi from '@/api/video'
-import Upload from '@/components/Upload.vue'
+import { VideoApi } from '@/api'
+import { Confirm, Message, Upload } from '@/components/common'
 export default defineComponent({
   name: 'CreateVideo',
   components: {

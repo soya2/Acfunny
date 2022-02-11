@@ -22,7 +22,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, PropType, watch } from 'vue'
-import Avatar from '@/components/Avatar.vue'
+import { Avatar } from '@/components/common'
 import { UserApi } from '@/api'
 
 export default defineComponent({

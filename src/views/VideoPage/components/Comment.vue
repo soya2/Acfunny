@@ -41,9 +41,8 @@
 
 <script lang="ts">
 import { defineComponent, ref, onMounted } from 'vue'
-import { dateParse } from '@/utils/index'
-import Message from '@/utils/message'
-import Avatar from '@/components/Avatar.vue'
+import { dateParse } from '@/utils'
+import { Avatar, Message } from '@/components/common'
 import { VideoApi } from '@/api'
 
 export default defineComponent({

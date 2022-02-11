@@ -50,8 +50,8 @@
 import { defineComponent, ref, onMounted, onUnmounted, computed } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
-import UserApi from '@/api/users'
-import Message from '@/utils/message'
+import { UserApi } from '@/api'
+import { Message } from '@/components/common'
 
 export default defineComponent({
   name: 'UserPlane',

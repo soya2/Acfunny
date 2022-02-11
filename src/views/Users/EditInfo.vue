@@ -55,10 +55,7 @@
 import { defineComponent, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { UserApi, ImagesApi } from '@/api'
-import Message from '@/utils/message'
-import Avatar from '@/components/Avatar.vue'
-import Upload from '@/components/Upload.vue'
-import Switch from '@/components/Switch.vue'
+import { Avatar, Message, Switch, Upload } from '@/components/common'
 export default defineComponent({
   name: 'EditInfo',
   components: {

@@ -54,11 +54,8 @@
 import { defineComponent, ref, computed, onMounted } from 'vue'
 import { dateParse } from '@/utils/index'
 import IconButton, { IconButtonType } from '@/components/IconButton/IconButton.vue'
-import Avatar from '@/components/Avatar.vue'
-import Button from '@/components/Button.vue'
-import Tag from '@/components/Tag.vue'
-import UserApi from '@/api/users'
-import { VideoApi } from '@/api'
+import { Avatar, Button, Tag } from '@/components/common'
+import { UserApi, VideoApi } from '@/api'
 
 export default defineComponent({
   name: 'Information',

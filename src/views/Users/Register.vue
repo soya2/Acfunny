@@ -38,8 +38,8 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import Message from '@/utils/message'
-import UserApi from '@/api/users'
+import { Message } from '@/components/common'
+import { UserApi } from '@/api'
 
 export default defineComponent({
   name: 'Register',

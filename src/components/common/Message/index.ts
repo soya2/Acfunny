@@ -1,5 +1,5 @@
 import { App, createApp } from 'vue'
-import Message from '@/components/Message/Message.vue'
+import Message from './Message.vue'
 interface MessageConfig {
   type: string;
   icon: string;

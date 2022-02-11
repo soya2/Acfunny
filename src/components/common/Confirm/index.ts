@@ -1,5 +1,5 @@
 import { createApp } from 'vue'
-import Confirm from '@/components/Confirm.vue'
+import Confirm from './Confirm.vue'
 
 export default function createInstance (
   message: string,
