@@ -8,6 +8,16 @@
   }
 }
 
+@keyframes slide-horizontal {
+  0% {
+    opacity: 0;
+    transform: translateX(6px);
+  }
+  100% {
+    transform: translateX(0px);
+  }
+}
+
 @keyframes load8 {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }

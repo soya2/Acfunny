@@ -110,6 +110,7 @@ export default defineComponent({
           fileHash.value
         )
         Message.success(msg)
+        fileHash.value = ''
       } catch {}
     }
 

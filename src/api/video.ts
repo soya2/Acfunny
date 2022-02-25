@@ -82,6 +82,26 @@ class VideoApi extends Api {
 
   @loginRequired()
   @Loading()
+  @Post('deleteInfo')
+  async deleteVideo (videoId: number): ResType {
+    return { videoId }
+  }
+
+  @loginRequired()
+  @Loading()
+  @Post('updateInfo')
+  async updateVideo (dto: {
+    id: number,
+    title: string,
+    cover: string,
+    summary: string,
+    tags: string
+  }): ResType {
+    return dto
+  }
+
+  @loginRequired()
+  @Loading()
   uploadVideoStream (from: FormData) {
     return Request.axiosInstance({
       url: 'video/videoBuffer',

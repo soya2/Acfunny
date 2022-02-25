@@ -22,17 +22,17 @@ export default defineComponent({
       userSubscriptionBar: [] as VideoData[]
     })
 
-    onBeforeMount(async () => {
-      data.userSubscriptionBar = [
-        {
-          id: 1,
-          title: 'this is a video title',
-          posterName: 'admin',
-          cover: '51236126',
-          isLive: true
-        }
-      ]
-    })
+    // onBeforeMount(async () => {
+    //   data.userSubscriptionBar = [
+    //     {
+    //       id: 1,
+    //       title: 'this is a video title',
+    //       posterName: 'admin',
+    //       cover: '51236126',
+    //       isLive: true
+    //     }
+    //   ]
+    // })
     return {
       ...toRefs(data)
     }

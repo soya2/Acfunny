@@ -41,7 +41,7 @@
 <script lang="ts">
 import { defineComponent, ref, onMounted, onUnmounted, computed } from 'vue'
 import { useStore } from 'vuex'
-import { UserApi, VideoApi } from '@/api'
+import { UserApi, VideoApi, ImagesApi } from '@/api'
 import { dateParse } from '@/utils/index'
 
 export default defineComponent({
@@ -53,6 +53,7 @@ export default defineComponent({
     const clickIcon = (flag = false) => { isClickIcon.value = flag }
     const handleClick = () => {
       changeVisible(!isVisible.value && isClickIcon.value)
+      if (isVisible.value) getHistoryList()
       clickIcon()
     }
     onMounted(() => {
@@ -69,9 +70,11 @@ export default defineComponent({
       const { data } = await UserApi.getUserInfoById(userId)
       const historyIdList = data.history
       const { data: videoData } = await VideoApi.getVideoList(0, historyIdList)
+      for await (const item of videoData) {
+        item.cover = await ImagesApi.getImage(item.cover)
+      }
       historyList.value = videoData
     }
-    getHistoryList()
 
     const store = useStore()
     const loginStatus = computed(() => store.state.isLogin)

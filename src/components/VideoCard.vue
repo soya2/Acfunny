@@ -18,7 +18,8 @@
     </div>
     <div
       v-if="type === 'horizontal'"
-      class="recommend-item slide-border"
+      class="recommend-item"
+      :class="{ 'slide-border': !isEdit }"
     >
       <img
         :src="cover"
@@ -30,6 +31,10 @@
           @click="handleClick(videoData.id)"
         >{{ videoData.title }}</span>
         <span class="poster">{{ videoData.posterName }}</span>
+      </div>
+      <div v-if="isEdit" class="operate">
+        <button class="btn-primary btn-lg" @click="handleClickOperate('edit')">修改</button>
+        <button class="btn-primary-plain btn-lg" @click="handleClickOperate('delete')">删除</button>
       </div>
     </div>
   </div>
@@ -45,6 +50,8 @@ export interface VideoData {
   title: string;
   posterName: string;
   cover: string;
+  summary: string;
+  tags: string;
   isLive?: boolean;
 }
 
@@ -58,9 +65,14 @@ export default defineComponent({
     videoData: {
       type: Object as PropType<VideoData>,
       required: true
+    },
+    isEdit: {
+      type: Boolean,
+      default: false
     }
   },
-  setup (props) {
+  emits: ['edit', 'delete'],
+  setup (props, ctx) {
     const cover = ref('')
     const getCover = async (name: string) => {
       if (name.trim() === '') return
@@ -69,14 +81,21 @@ export default defineComponent({
     getCover(props.videoData.cover)
     const router = useRouter()
     const handleClick = (id: number) => {
+      if (props.isEdit) return
       router.push({
         path: '/video',
         query: { id }
       })
     }
+
+    const handleClickOperate = (type: 'edit' | 'delete') => {
+      ctx.emit(type, props.videoData)
+    }
+
     return {
       cover,
-      handleClick
+      handleClick,
+      handleClickOperate
     }
   }
 })
@@ -136,6 +155,7 @@ export default defineComponent({
   }
   .item-info {
     margin-left: .6rem;
+    flex-grow: 1;
     & > * { cursor: pointer; }
     .title {
       font-weight: bold;
@@ -149,6 +169,11 @@ export default defineComponent({
       color: #969696;
       font-size: .8rem;
     }
+  }
+  .operate {
+    display: flex;
+    align-items: flex-end;
+    & > * { margin-left: .4rem; }
   }
 }
 </style>

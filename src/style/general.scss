@@ -38,6 +38,9 @@
 .vertical-enter-active { animation: slide-vertical .2s; }
 .vertical-leave-active { animation: slide-vertical .2s reverse; }
 
+.horizontal-enter-active { animation: slide-horizontal .4s; }
+.horizontal-leave-active { animation: slide-horizontal .4s reverse; }
+
 // aside-item
 .aside-item {
   border-radius: 6px;

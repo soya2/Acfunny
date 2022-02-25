@@ -7,7 +7,7 @@
     />
     <div class="base-container create-main">
       <CreateVideo ref="createVideoRef" v-show="asideId === 0" />
-      <div v-show="asideId === 1">123</div>
+      <ManageVideo ref="manageVideoRef" v-show="asideId === 1" />
     </div>
   </div>
 </template>
@@ -16,11 +16,13 @@
 import { defineComponent, ref } from 'vue'
 import Aside from './components/Aside.vue'
 import CreateVideo from './components/CreateVideo.vue'
+import ManageVideo from './components/ManageVideo.vue'
 export default defineComponent({
   name: 'Create',
   components: {
     Aside,
-    CreateVideo
+    CreateVideo,
+    ManageVideo
   },
   setup () {
     const asideRef = ref()
@@ -30,10 +32,14 @@ export default defineComponent({
     ])
     const asideId = ref(0)
     const createVideoRef = ref()
+    const manageVideoRef = ref()
     const changeAsideItem = async (id: number) => {
       try {
         if (asideId.value === 0) {
           await createVideoRef.value.cancel()
+        }
+        if (id === 1) {
+          manageVideoRef.value.getVideoList()
         }
         asideRef.value.changeIndex(id)
         asideId.value = id
@@ -44,6 +50,7 @@ export default defineComponent({
       asideItems,
       asideId,
       createVideoRef,
+      manageVideoRef,
       changeAsideItem
     }
   }
@@ -54,6 +61,7 @@ export default defineComponent({
 .create-container {
   margin: 1rem 0;
   display: flex;
+  height: 100%;
   justify-content: center;
 }
 .create-main {
