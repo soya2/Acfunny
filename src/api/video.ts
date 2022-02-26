@@ -13,7 +13,7 @@ class VideoApi extends Api {
   }
 
   @Get('videoList')
-  async getVideoList (type: 0 | 1, list: number[]): ResType {
+  async getVideoList (type: 0 | 1, list?: number[] | number): ResType {
     return { type, list }
   }
 

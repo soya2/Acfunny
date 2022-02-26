@@ -7,7 +7,7 @@
       <font-awesome-icon icon="star" />
       {{ title }}
     </div>
-    <div class="vc-list">
+    <div class="list">
       <video-card
         v-for="video in videoDataList"
         :key="video.id"
@@ -49,9 +49,13 @@ export default defineComponent({
     font-weight: bold;
     color: #ffd116;
   }
-  .vc-list {
+  .list {
     display: flex;
-    & > * { width: 14%; }
+    flex-wrap: wrap;
+    & > * {
+      width: 14%;
+      min-width: 10rem;
+    }
   }
 }
 </style>

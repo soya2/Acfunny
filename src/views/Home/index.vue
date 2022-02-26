@@ -1,16 +1,18 @@
 <template>
-  <div class="container">
-    <video-card-bar
-      title="Subscription"
-      :video-data-list="userSubscriptionBar"
-    />
+  <div>
+    <keep-alive>
+      <video-card-bar
+        title="Subscription"
+        :videoDataList="videoList"
+      />
+    </keep-alive>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, toRefs, reactive, onBeforeMount } from 'vue'
+import { VideoApi } from '@/api'
+import { defineComponent, ref } from 'vue'
 import VideoCardBar from './components/VideoCardBar.vue'
-import { VideoData } from '@/components/VideoCard.vue'
 
 export default defineComponent({
   name: 'Home',
@@ -18,27 +20,21 @@ export default defineComponent({
     VideoCardBar
   },
   setup () {
-    const data = reactive({
-      userSubscriptionBar: [] as VideoData[]
-    })
+    const videoList = ref([])
+    const getVideoList = async () => {
+      try {
+        const { data } = await VideoApi.getVideoList(1, 10)
+        videoList.value = data
+      } catch {}
+    }
+    getVideoList()
 
-    // onBeforeMount(async () => {
-    //   data.userSubscriptionBar = [
-    //     {
-    //       id: 1,
-    //       title: 'this is a video title',
-    //       posterName: 'admin',
-    //       cover: '51236126',
-    //       isLive: true
-    //     }
-    //   ]
-    // })
     return {
-      ...toRefs(data)
+      videoList
     }
   }
 })
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 </style>

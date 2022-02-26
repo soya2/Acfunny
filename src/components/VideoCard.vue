@@ -1,41 +1,19 @@
 <template>
-  <div>
-    <div
-      v-if="type === 'vertical'"
-      class="card-container slide-border"
-    >
-      <img
-        :src="cover"
-        alt="no-image"
-        @click="handleClick(videoData.id)"
-      /><br />
-      <!-- <div v-if="videoData.isLive" class="is-live">Live</div> -->
-      <span
-        class="vc-title"
-        @click="handleClick(videoData.id)"
-      >{{ videoData.title }}</span>
-      <span class="vc-poster">{{ videoData.posterName }}</span>
+  <div
+    :class="{
+      'card-container': type === 'vertical',
+      'recommend-item': type === 'horizontal',
+      'slide-border': !isEdit
+    }"
+  >
+    <img :src="cover" @click="handleClick(videoData.id)" />
+    <div class="item-info">
+      <span class="title" @click="handleClick(videoData.id)">{{ videoData.title }}</span>
+      <span class="poster">{{ videoData.posterName }}</span>
     </div>
-    <div
-      v-if="type === 'horizontal'"
-      class="recommend-item"
-      :class="{ 'slide-border': !isEdit }"
-    >
-      <img
-        :src="cover"
-        @click="handleClick(videoData.id)"
-      />
-      <div class="item-info">
-        <span
-          class="title"
-          @click="handleClick(videoData.id)"
-        >{{ videoData.title }}</span>
-        <span class="poster">{{ videoData.posterName }}</span>
-      </div>
-      <div v-if="isEdit" class="operate">
-        <button class="btn-primary btn-lg" @click="handleClickOperate('edit')">修改</button>
-        <button class="btn-primary-plain btn-lg" @click="handleClickOperate('delete')">删除</button>
-      </div>
+    <div v-if="isEdit" class="operate">
+      <button class="btn-primary btn-lg" @click="handleClickOperate('edit')">修改</button>
+      <button class="btn-primary-plain btn-lg" @click="handleClickOperate('delete')">删除</button>
     </div>
   </div>
 </template>
@@ -52,7 +30,6 @@ export interface VideoData {
   cover: string;
   summary: string;
   tags: string;
-  isLive?: boolean;
 }
 
 export default defineComponent({
@@ -106,29 +83,32 @@ export default defineComponent({
   padding: 4px;
   margin: 4px 8px;
   border-radius: 4px;
-  position: relative;
   & > * { cursor: pointer; }
   &:not(:first-child) { padding-left: 8px; }
   &:hover img { box-shadow: 0 4px 12px #d7d7d7; }
-  img {
-    border-radius: 4px;
-    width: 100%;
-    transition: .4s;
-  }
-  .is-live {
-    width: 10%;
-    height: 6%;
-    padding: 0 8px 4px 8px;
-    background-color: #ff2337;
-    color: white;
-    font-size: 50%;
-    border-radius: 4px;
-    position: absolute;
-    top: 12px;
-    left: 16px;
-  }
-  .vc-title {
-    font-size: 1.2rem;
+  &:hover .title,.poster { color: red; }
+  img { width: 100%; height: 64%; }
+}
+.recommend-item {
+  display: flex;
+  border-radius: 4px;
+  padding: .2rem;
+  height: 6rem;
+  &:hover .title,.poster { color: red; }
+  img { margin-right: .6rem; }
+}
+img {
+  height: 6rem;
+  width: 10rem;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px 4px rgb(232, 232, 232);
+  cursor: pointer;
+}
+.item-info {
+  flex-grow: 1;
+  & > * { cursor: pointer; }
+  .title {
+    transition: .2s;
     font-weight: bold;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -136,44 +116,14 @@ export default defineComponent({
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
   }
-  .vc-poster {
-    text-align: justify;
-    color: rgb(150, 150, 150);
+  .poster {
+    color: #969696;
+    font-size: .8rem;
   }
 }
-.recommend-item {
+.operate {
   display: flex;
-  border-radius: 4px;
-  padding: .2rem;
-  height: 6rem;
-  img {
-    height: 6rem;
-    width: 10rem;
-    border-radius: 4px;
-    box-shadow: 0 2px 8px 4px rgb(232, 232, 232);
-    cursor: pointer;
-  }
-  .item-info {
-    margin-left: .6rem;
-    flex-grow: 1;
-    & > * { cursor: pointer; }
-    .title {
-      font-weight: bold;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-    }
-    .poster {
-      color: #969696;
-      font-size: .8rem;
-    }
-  }
-  .operate {
-    display: flex;
-    align-items: flex-end;
-    & > * { margin-left: .4rem; }
-  }
+  align-items: flex-end;
+  & > * { margin-left: .4rem; }
 }
 </style>
