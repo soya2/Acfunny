@@ -20,6 +20,14 @@ module.exports = {
       alias: {
         '@': resolve('src')
       }
+    },
+    module: {
+      rules: [
+        {
+          test: /\.worker\.ts$/,
+          use: { loader: 'worker-loader' }
+        }
+      ]
     }
   }
 }

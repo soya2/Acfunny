@@ -5,9 +5,12 @@
       <label>视频：</label>
       <Upload
         ref="uploadRef"
+        @handleChooseFile="chooseFile"
         @handleClickUpload="uploadFile"
         @handleClickDelete="deleteFile"
       />
+      <label>封面：</label>
+      <img class="cover" :src="coverSrc" />
       <label for="title">视频标题：</label>
       <input
         id="title"
@@ -41,8 +44,8 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import { onBeforeRouteLeave } from 'vue-router'
-import { bufferSlice } from '@/utils/index'
-import { VideoApi } from '@/api'
+import { bufferSlice, srcToBuffer } from '@/utils'
+import { ImagesApi, VideoApi } from '@/api'
 import { Confirm, Message, Upload } from '@/components/common'
 export default defineComponent({
   name: 'CreateVideo',
@@ -58,6 +61,16 @@ export default defineComponent({
 
     const uploadRef = ref()
     const fileHash = ref('')
+    const coverSrc = ref()
+    const coverBuffer = ref()
+    const chooseFile = async (buffer: ArrayBuffer, raw: ArrayBuffer) => {
+      const timeInput = 20;
+      (window as any).webCapture.capture(raw, timeInput * 1000, async (dataURL: string) => {
+        coverSrc.value = dataURL
+        coverBuffer.value = await srcToBuffer(dataURL)
+      })
+    }
+
     const uploadFile = async (buffer: ArrayBuffer) => {
       const bufferList = bufferSlice(buffer)
       const requestList: CallableFunction[] = []
@@ -94,20 +107,23 @@ export default defineComponent({
       try {
         const { file } = uploadRef.value
         if (!file) return Message.error('请选择文件')
-        if (fileHash.value.trim() === '') {
-          return Message.error('请上传视频')
-        }
-        if (videoData.value.title.trim() === '') {
-          return Message.error('视频标题不能为空')
-        }
+        if (fileHash.value.trim() === '') return Message.error('请上传视频')
+        if (videoData.value.title.trim() === '') return Message.error('视频标题不能为空')
         const tagsArr = videoData.value.tags.split(',').filter(item => {
           if (item.trim() !== '') return item
         })
+        let cover
+        if (coverBuffer.value) {
+          const { data } = await ImagesApi.postImage(coverBuffer.value)
+          cover = data.fileHash
+        } else cover = ''
+
         const { msg } = await VideoApi.uploadVideoInfo(
           videoData.value.title,
           videoData.value.summary,
           tagsArr,
-          fileHash.value
+          fileHash.value,
+          cover
         )
         Message.success(msg)
         fileHash.value = ''
@@ -136,6 +152,8 @@ export default defineComponent({
     return {
       videoData,
       uploadRef,
+      coverSrc,
+      chooseFile,
       uploadFile,
       deleteFile,
       submit,
@@ -156,5 +174,9 @@ textarea {
 .button-bar {
   display: flex;
   justify-content: flex-end;
+}
+.cover {
+  display: block;
+  width: 12rem;
 }
 </style>

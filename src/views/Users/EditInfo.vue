@@ -97,6 +97,7 @@ export default defineComponent({
       try {
         const tempHash = userData.value.avatar
         if (avatarUrl.value.trim() !== '') {
+          if (tempHash.trim() !== '') await ImagesApi.deleteImage(tempHash)
           const { data } = await ImagesApi.postImage(avatarBuffer.value)
           userData.value.avatar = data.fileHash
         }
@@ -108,7 +109,6 @@ export default defineComponent({
           showHistory: userInfo.value.showHistory,
           showFavorite: userInfo.value.showFavorite
         })
-        if (tempHash.trim() !== '') await ImagesApi.deleteImage(tempHash)
         Message.success(msg)
       } catch {}
     }

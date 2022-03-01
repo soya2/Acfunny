@@ -71,7 +71,7 @@ export default defineComponent({
         fileName.value = chooseFile.name
         uploadButtonVisible.value = true
         file.value = await chooseFile?.arrayBuffer()
-        context.emit('handleChooseFile', file.value)
+        context.emit('handleChooseFile', file.value, chooseFile)
       }
     }
 

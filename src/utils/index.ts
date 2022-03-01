@@ -27,3 +27,12 @@ export function bufferSlice (buffer: ArrayBuffer): Array<{ chunk: Blob, fileName
   }
   return chunkList
 }
+
+export async function srcToBuffer (src: string): Promise<ArrayBuffer | null> {
+  const res = await fetch(src)
+  if (res.ok) {
+    const buffer = await res.arrayBuffer()
+    return buffer
+  }
+  return null
+}

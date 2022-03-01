@@ -68,7 +68,8 @@ class VideoApi extends Api {
     title: string,
     summary: string,
     tags: string[],
-    fileName: string
+    fileName: string,
+    cover: string
   ): ResType {
     return {
       userId: Number(window.localStorage.getItem('userId')),
@@ -76,7 +77,8 @@ class VideoApi extends Api {
       title,
       summary,
       tags,
-      fileName
+      fileName,
+      cover
     }
   }
 
