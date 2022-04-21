@@ -1,24 +1,37 @@
 <template>
   <div>
-    <input />
+    <input v-model="keyword" @keyup.enter="search" />
     <button>
-      <font-awesome-icon icon="search" />
+      <font-awesome-icon icon="search" @click="search" />
     </button>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from 'vue'
+import { defineComponent, ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { Message } from '@/components/common'
 
 export default defineComponent({
   name: 'SearchBar',
-  components: {
-  },
   setup () {
-    const data = reactive({
-    })
+    const router = useRouter()
+    const keyword = ref('')
+    const search = () => {
+      if (keyword.value.trim() === '') {
+        return Message.error('请输入关键词')
+      }
+      router.push({
+        name: 'SearchPage',
+        params: {
+          keyword: keyword.value
+        }
+      })
+    }
+
     return {
-      ...toRefs(data)
+      keyword,
+      search
     }
   }
 })

@@ -4,7 +4,10 @@ export const UserRoutes: Array<RouteRecordRaw> = [
   {
     path: '/register',
     name: 'Register',
-    component: () => import('@/views/Users/Register.vue')
+    component: () => import('@/views/Users/Register.vue'),
+    meta: {
+      title: '注册'
+    }
   },
   {
     path: '/personal-center',

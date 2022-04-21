@@ -1,6 +1,6 @@
 <template>
   <footer>
-    111
+    <div>18计算机11班 邹其峰@2022</div>
   </footer>
 </template>
 
@@ -19,5 +19,12 @@ footer {
   margin-top: auto;
   padding: 12px;
   background-color: rgb(236, 236, 236);
+  div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: .5rem;
+    color: gray;
+  }
 }
 </style>

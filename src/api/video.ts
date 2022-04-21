@@ -103,7 +103,6 @@ class VideoApi extends Api {
   }
 
   @loginRequired()
-  @Loading()
   uploadVideoStream (from: FormData) {
     return Request.axiosInstance({
       url: 'video/videoBuffer',
@@ -117,6 +116,11 @@ class VideoApi extends Api {
   @Get('removeVideoFile')
   async deleteVideoFile (hash: string): ResType {
     return { name: hash }
+  }
+
+  @Post('search')
+  async getVideoListByKeyword (keyword: string): ResType {
+    return { keyword }
   }
 }
 

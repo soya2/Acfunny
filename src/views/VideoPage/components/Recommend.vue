@@ -1,5 +1,5 @@
 <template>
-  <h3 style="margin: 0 0 1em 0;">大家都在看</h3>
+  <h3 style="margin: 0 0 1em 0;">推荐视频</h3>
   <video-card
     type="horizontal"
     v-for="item in recommendList"
@@ -19,11 +19,11 @@ export default defineComponent({
   },
   setup () {
     const recommendList = ref([] as VideoData[])
-    const getRecommendVideoList = async (list: number[]) => {
-      const { data } = await VideoApi.getVideoList(0, list)
+    const getRecommendVideoList = async () => {
+      const { data } = await VideoApi.getVideoList(1, 10)
       recommendList.value = data
     }
-    onMounted(() => getRecommendVideoList([1, 2]))
+    onMounted(() => getRecommendVideoList())
 
     return {
       recommendList

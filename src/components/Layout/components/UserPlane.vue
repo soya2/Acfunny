@@ -55,7 +55,8 @@ import { Message } from '@/components/common'
 
 export default defineComponent({
   name: 'UserPlane',
-  setup () {
+  emits: ['login'],
+  setup (props, context) {
     const isVisible = ref(false)
     const changeVisible = (flag: boolean) => { isVisible.value = flag }
     const isClickIcon = ref(false)
@@ -72,8 +73,8 @@ export default defineComponent({
     })
 
     const formData = ref({
-      username: '',
-      password: ''
+      username: 'admin',
+      password: '123456'
     })
     // 96b372c8042314c9ccde70eb601d4d89
 
@@ -98,8 +99,8 @@ export default defineComponent({
         store.commit('changeLoginState', true)
         formData.value.username = ''
         formData.value.password = ''
-        router.push('/')
-        handleClick()
+        routePush('/')
+        context.emit('login', data.id)
       } catch {}
     }
     const handleLogout = async () => {
@@ -116,7 +117,7 @@ export default defineComponent({
 
     const routePush = (url: string) => {
       router.push(url)
-      handleClick()
+      changeVisible(false)
     }
 
     return {

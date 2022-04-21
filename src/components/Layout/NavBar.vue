@@ -1,10 +1,7 @@
 <template>
   <nav>
-    <div
-      style="width: 33%"
-      @click="router.push({ name: 'Home' })"
-    >
-      <div class="logo">Logo</div>
+    <div style="width: 33%">
+      <div class="logo" @click="router.push({ name: 'Home' })">🏮Home</div>
     </div>
     <div class="search-bar">
       <search-bar />
@@ -46,7 +43,7 @@
           :button-object="navItemList[3]"
         />
         <transition name="vertical">
-          <user-plane ref="userRef" />
+          <user-plane ref="userRef" @login="getUserInfo" />
         </transition>
       </div>
     </div>
@@ -119,7 +116,8 @@ export default defineComponent({
       clickIcon,
       router,
       loginStatus,
-      userAvatar
+      userAvatar,
+      getUserInfo
     }
   }
 })

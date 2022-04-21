@@ -66,7 +66,7 @@ export default defineComponent({
     const historyList = ref([])
     const getHistoryList = async () => {
       const userId = Number(window.localStorage.getItem('userId'))
-      if (Number.isNaN(userId)) return
+      if (Number.isNaN(userId) || userId === 0) return
       const { data } = await UserApi.getUserInfoById(userId)
       const historyIdList = data.history
       const { data: videoData } = await VideoApi.getVideoList(0, historyIdList)

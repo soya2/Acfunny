@@ -65,6 +65,14 @@ class UserApi extends Api {
     showHistory: boolean;
     showFavorite: boolean
   }): ResType { return infoData }
+
+  @loginRequired()
+  @Loading()
+  @Post('updateUserBanner')
+  async editUserBanner (infoData: {
+    userId: number,
+    banner: string
+  }): ResType { return infoData }
 }
 
 export default new UserApi()

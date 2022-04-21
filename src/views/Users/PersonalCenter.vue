@@ -1,5 +1,8 @@
 <template>
-  <img class="banner" :src="userInfo.banner" />
+  <div class="banner">
+    <img :src="userInfo.banner" />
+    <button @click="changeBanner">更换封面</button>
+  </div>
   <div class="content-container">
     <div class="user-data-bar">
       <div style="display: flex;">
@@ -62,7 +65,7 @@
 import { defineComponent, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { ImagesApi, UserApi } from '@/api'
-import { Avatar, Button } from '@/components/common'
+import { Avatar, Button, Message } from '@/components/common'
 import Tabs, { TabsOptions } from '@/components/common/Tabs.vue'
 import UserInfo from './components/UserInfo.vue'
 import PostVideoList from './components/PostVideoList.vue'
@@ -157,6 +160,29 @@ export default defineComponent({
       getUserInfo(Number(oldVal.query.id))
     })
 
+    const changeBanner = () => {
+      const input = document.createElement('input')
+      input.type = 'file'
+      input.click()
+      input.onchange = async () => {
+        let buffer: ArrayBuffer | undefined
+        if (input) {
+          const files = input.files
+          const chooseFile = files && files[0]
+          buffer = await chooseFile?.arrayBuffer()
+        }
+        if (buffer) {
+          const { data: file } = await ImagesApi.postImage(buffer)
+          const { data, msg } = await UserApi.editUserBanner({
+            userId: Number(userData.value.id),
+            banner: file.fileHash
+          })
+          data ? Message.success(msg) : Message.error(msg)
+          data && (userInfo.value.banner = await ImagesApi.getImage(file.fileHash))
+        }
+      }
+    }
+
     return {
       userData,
       isFollow,
@@ -167,7 +193,8 @@ export default defineComponent({
       loginId,
       userId,
       isActiveTab,
-      userInfoRef
+      userInfoRef,
+      changeBanner
     }
   }
 })
@@ -175,9 +202,25 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .banner {
-  width: 100%;
-  height: 8rem;
-  object-fit: cover;
+  position: relative;
+  img {
+    width: 100%;
+    height: 8rem;
+    object-fit: cover;
+  }
+  button {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    background-color: rgba(255, 255, 255, 0.3);
+    transition: .2s;
+    padding: 6px 12px;
+    border-radius: 4px;
+    border: 1px solid rgb(145, 145, 145);
+    &:hover {
+      background-color: rgba(221, 221, 221, 0.3);
+    }
+  }
 }
 .content-container {
   display: flex;

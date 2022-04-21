@@ -40,7 +40,10 @@ export default defineComponent({
     const url = ref('')
     const hasDefault = ref(true)
     const getUrl = async (name: string) => {
-      if (name.trim() === '') return
+      if (name.trim() === '') {
+        hasDefault.value = true
+        return
+      }
       url.value = await ImagesApi.getImage(name)
       hasDefault.value = url.value === ''
     }

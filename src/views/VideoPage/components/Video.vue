@@ -26,7 +26,6 @@ export default defineComponent({
 <style lang="scss" scoped>
 .video-container {
   width: 100%;
-  height: 500px;
   background-color: black;
   color: white;
 }

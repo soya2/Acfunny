@@ -1,15 +1,17 @@
 import { createApp, App } from 'vue'
 import Loading from './Loading.vue'
 
-let INSTANCE: App
-let NODE: HTMLDivElement
+let INSTANCE: App | null
+let NODE: HTMLDivElement | null
 const removeFn = (): void => {
   if (!(INSTANCE || NODE)) return
   try {
-    INSTANCE.unmount()
-    document.body.removeChild(NODE)
+    (INSTANCE as App).unmount()
+    document.body.removeChild(NODE as HTMLDivElement)
     document.documentElement.style.overflowY = ''
   } catch {}
+  INSTANCE = null
+  NODE = null
 }
 
 function createInstance (

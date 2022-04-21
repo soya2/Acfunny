@@ -52,7 +52,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed, onMounted } from 'vue'
-import { dateParse } from '@/utils/index'
+import { dateParse, copyPath } from '@/utils/index'
 import IconButton, { IconButtonType } from '@/components/IconButton/IconButton.vue'
 import { Avatar, Button, Tag } from '@/components/common'
 import { UserApi, VideoApi } from '@/api'
@@ -152,6 +152,8 @@ export default defineComponent({
         } catch {
           buttonList[index].isCheck = false
         }
+      } else if (id === 5) {
+        await copyPath(document.URL)
       }
     }
 

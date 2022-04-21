@@ -46,7 +46,7 @@ import { defineComponent, ref } from 'vue'
 import { onBeforeRouteLeave } from 'vue-router'
 import { bufferSlice, srcToBuffer } from '@/utils'
 import { ImagesApi, VideoApi } from '@/api'
-import { Confirm, Message, Upload } from '@/components/common'
+import { Confirm, Message, Upload, Loader } from '@/components/common'
 export default defineComponent({
   name: 'CreateVideo',
   components: {
@@ -72,7 +72,11 @@ export default defineComponent({
     }
 
     const uploadFile = async (buffer: ArrayBuffer) => {
+      Loader.start(10000, '视频上传中')
+      const startDate = Date.now()
+      console.log('视频的长度（M）:' + buffer.byteLength / 1024 / 1024)
       const bufferList = bufferSlice(buffer)
+      console.log('chunk的个数:' + bufferList.length)
       const requestList: CallableFunction[] = []
       bufferList.forEach(item => {
         const fn = async () => {
@@ -93,6 +97,9 @@ export default defineComponent({
           }
         }
       } catch {}
+      Loader.stop()
+      const endDate = Date.now()
+      console.log('上传的总时长（毫秒）:' + (endDate - startDate))
     }
 
     const deleteFile = async () => {
@@ -101,6 +108,7 @@ export default defineComponent({
         await VideoApi.deleteVideoFile(fileHash.value)
         fileHash.value = ''
       } catch {}
+      coverSrc.value = ''
     }
 
     const submit = async () => {

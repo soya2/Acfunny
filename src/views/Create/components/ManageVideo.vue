@@ -5,7 +5,7 @@
       <div v-if="!isEdit">
         <VideoCard
           v-for="item in videoList"
-          :key="item.key"
+          :key="item.id"
           :videoData="item"
           type="horizontal"
           isEdit
@@ -68,6 +68,7 @@ export default defineComponent({
     const videoList = ref([])
     const getVideoList = async () => {
       try {
+        if (userId === 0) return
         const { data: userInfo } = await UserApi.getUserInfoById(userId)
         const { data: list } = await VideoApi.getVideoList(0, userInfo.postVideo)
         videoList.value = list

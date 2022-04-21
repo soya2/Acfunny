@@ -15,6 +15,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import { useRouter } from 'vue-router'
 export default defineComponent({
   name: 'Tag',
   props: {
@@ -24,8 +25,14 @@ export default defineComponent({
     }
   },
   setup (props) {
+    const router = useRouter()
     const clickTag = () => {
-      console.log(props.tagName)
+      router.push({
+        name: 'SearchPage',
+        params: {
+          keyword: props.tagName
+        }
+      })
     }
 
     return {
